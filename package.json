@@ -1,0 +1,26 @@
+{
+  "name": "tpl-stencil",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "tpl": "src/tpl.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Linjovi/tpl-stencil.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Linjovi/tpl-stencil/issues"
+  },
+  "homepage": "https://github.com/Linjovi/tpl-stencil#readme",
+  "dependencies": {
+    "nunjucks": "^3.2.0"
+  }
+}
