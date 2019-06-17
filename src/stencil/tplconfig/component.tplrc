@@ -1,0 +1,23 @@
+{
+  "fileType": 1,
+  "children": [
+    {
+      "tpl": "nej",
+      "type": "js",
+      "name": "component"
+    },
+    {
+      "type": "html",
+      "name": "component"
+    },
+    {
+      "tpl": "uijs",
+      "type": "js",
+      "name": "ui"
+    },
+    {
+      "type": "scss",
+      "name": "component"
+    }
+  ]
+}
