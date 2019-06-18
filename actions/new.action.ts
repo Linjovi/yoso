@@ -1,33 +1,26 @@
-#!/usr/bin/env node
-
-var fs = require("fs");
-var nunjucks = require("nunjucks");
-var argv = process.argv;
-var filePath = __dirname;
+import { NewCmd } from "../commands";
+import { AbstractAction } from "./abstract.action";
+import { Tplrc } from "./action.input";
+import * as fs from "fs";
+import * as nunjucks from "nunjucks";
+import * as path from "path";
+import { checkDirExist } from "../utils/utils";
+var filePath = path.dirname(__dirname);
 var currentPath = process.cwd();
-// console.log(filePath)
-var utils = require("./utils");
-// cli parse
-argv.shift();
-argv.shift();
-// console.log(argv)
-var path = argv[2];
-var dirPathList = path.split("/");
-var name = dirPathList[dirPathList.length - 1];
-dirPathList.pop();
-var dirPath = dirPathList.join("/");
 
-var data = {
-  method: argv[0],
-  model: argv[1],
-  fullPath: argv[2],
-  name: name,
-  path: dirPath
-};
+export class NewAction extends AbstractAction {
+  public async handle(inputs: NewCmd) {
+    var name = path.basename(inputs.path);
+    var dirPath = path.dirname(inputs.path);
 
-switch (data.method) {
-  case "create":
-    utils.checkDirExist(currentPath + "/" + data.path);
+    var data = {
+      model: inputs.tpl,
+      fullPath: inputs.path,
+      name: name,
+      path: dirPath
+    };
+
+    checkDirExist(currentPath + "/" + data.path);
     //read json
     var tplrcPath = currentPath + "/stencil/tplconfig/" + data.model + ".tplrc";
     //if currentTplrc exists
@@ -38,15 +31,15 @@ switch (data.method) {
     var tplrc = JSON.parse(fs.readFileSync(tplrcPath).toString());
     //if fileType is dir
     if (tplrc.fileType === 1) {
-      utils.checkDirExist(currentPath + "/" + data.fullPath);
+      checkDirExist(currentPath + "/" + data.fullPath);
       data.path = data.fullPath;
     }
 
-    tplrc.children.forEach(item => {
+    tplrc.children.forEach((item: Tplrc) => {
       const suffix = item.type;
       const name = item.name ? item.name : data.name;
       item.tpl = item.tpl || item.type;
-      
+
       // read tpl
       var tplPath = currentPath + "/stencil/tpl/" + item.tpl + ".tpl";
       tplPath = fs.existsSync(tplPath)
@@ -63,8 +56,5 @@ switch (data.method) {
         compiledData
       );
     });
-
-    break;
-  default:
-    return;
+  }
 }
