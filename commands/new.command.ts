@@ -7,7 +7,7 @@ export class NewCommand extends AbstractCommand {
     program
       .command("new <tpl> <path>")
       .alias("n")
-      .description("Generate Nest application")
+      .description("Generate File From tplrc, example: tpl new vue src/views/demo")
       // .option("-t, --tpl <tpl>", "choose tpl")
       .action(async (tpl: string, path: string, command: Command) => {
 
