@@ -5,15 +5,21 @@ import * as fs from "fs";
 import * as nunjucks from "nunjucks";
 import * as path from "path";
 import { checkDirExist } from "../utils/utils";
-var filePath = path.dirname(__dirname);
-var currentPath = process.cwd();
+var filePath = path.dirname(__dirname);//tpl-stencil根目录
+var currentPath = process.cwd();//当前目录
+var rootPath = path.dirname(currentPath);//当前工程父级目录
+
+var data: any;
 
 export class NewAction extends AbstractAction {
+
   public async handle(inputs: NewCmd) {
+    console.log("filePath:"+filePath)
+    console.log("currentpath:"+currentPath)
     var name = path.basename(inputs.path);
     var dirPath = path.dirname(inputs.path);
-
-    var data = {
+    
+    data = {
       model: inputs.tpl,
       fullPath: inputs.path,
       name: name,
@@ -22,11 +28,7 @@ export class NewAction extends AbstractAction {
 
     checkDirExist(currentPath + "/" + data.path);
     //read json
-    var tplrcPath = currentPath + "/stencil/tplconfig/" + data.model + ".tplrc";
-    //if currentTplrc exists
-    tplrcPath = fs.existsSync(tplrcPath)
-      ? tplrcPath
-      : filePath + "/stencil/tplconfig/" + data.model + ".tplrc";
+    var tplrcPath = localPathFirst(path.join("stencil","tplconfig",data.model + ".tplrc"));
     // read tplrc
     var tplrc = JSON.parse(fs.readFileSync(tplrcPath).toString());
     //if fileType is dir
@@ -35,26 +37,31 @@ export class NewAction extends AbstractAction {
       data.path = data.fullPath;
     }
 
-    tplrc.children.forEach((item: Tplrc) => {
-      const suffix = item.type;
-      const name = item.name ? item.name : data.name;
-      item.tpl = item.tpl || item.type;
-
-      // read tpl
-      var tplPath = currentPath + "/stencil/tpl/" + item.tpl + ".tpl";
-      tplPath = fs.existsSync(tplPath)
-        ? tplPath
-        : filePath + "/stencil/tpl/" + item.tpl + ".tpl";
-      var tpl = fs.readFileSync(tplPath).toString();
-
-      // tpl compile
-      var compiledData = nunjucks.renderString(tpl, data);
-
-      // write file
-      fs.writeFileSync(
-        currentPath + "/" + data.path + "/" + name + "." + suffix,
-        compiledData
-      );
-    });
+    tplrc.children.forEach(generateFileWithTplrc);
   }
+}
+
+const generateFileWithTplrc = (tplrc: Tplrc) => {
+  const suffix = tplrc.type;
+  const name = tplrc.name ? tplrc.name : data.name;
+  tplrc.tpl = tplrc.tpl || tplrc.type;
+
+  // read tpl
+  var tplPath = localPathFirst(path.join("stencil","tpl",tplrc.tpl + ".tpl"));
+  var tpl = fs.readFileSync(tplPath).toString();
+
+  // tpl compile
+  var compiledData = nunjucks.renderString(tpl, data);
+
+  // write file
+  fs.writeFileSync(
+    currentPath + "/" + data.path + "/" + name + "." + suffix,
+    compiledData
+  );
+};
+
+const localPathFirst = (relativePath:string) => {
+  const localPath = path.join(currentPath,relativePath);
+  const libPath = path.join(filePath,relativePath);
+  return fs.existsSync(localPath)?localPath:libPath;
 }

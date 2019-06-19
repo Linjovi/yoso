@@ -1,13 +1,13 @@
 {
   "name": "tpl-stencil",
-  "version": "0.0.4",
+  "version": "0.0.8",
   "description": "",
-  "main": "index.js",
   "bin": {
-    "tpl": " bin/tpl.js"
+    "tpl": "bin/tpl.js"
   },
   "scripts": {
     "build": "rm -rf ./dist && tsc",
+    "prepare": "npm run build",
     "test": "jest --config test/jest-config.json"
   },
   "repository": {

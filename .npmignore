@@ -1,0 +1,11 @@
+# .idea/
+# .gitignore
+# .travis.yml
+
+# # source
+# **/*.ts
+# *.ts
+
+# # definitions
+# !**/*.d.ts
+# !*.d.ts
