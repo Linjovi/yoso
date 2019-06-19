@@ -3,4 +3,5 @@ export * from './command.input';
 
 
 import { indexView } from '../ui/index'
+console.log(1)
 indexView()
