@@ -11,7 +11,7 @@ export class NewCommand extends AbstractCommand {
       // .option("-t, --tpl <tpl>", "choose tpl")
       .action(async (tpl: string, path: string, command: Command) => {
 
-        let inputs: NewCmd = {path,tpl}
+        let inputs: NewCmd = {path,tpl,options:command}
         await this.action.handle(inputs);
       });
   }

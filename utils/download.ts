@@ -1,16 +1,15 @@
-import {mkdirsSync} from "./utils"
-import * as fs from "fs"
-import * as path from "path"
-import * as ProgressBar from "progress"
-import * as logSymbols from "log-symbols"
-import * as request from "request"
-import axios from "axios"
-import chalk from "chalk"
-import ora from "ora"
+import { mkdirsSync } from "./utils";
+import * as fs from "fs";
+import * as path from "path";
+import * as ProgressBar from "progress";
+import * as logSymbols from "log-symbols";
+import * as request from "request";
+import axios from "axios";
+import chalk from "chalk";
+import ora from "ora";
 const exportBaseUrl = path.join(process.cwd(), "");
-let spinner:any = null; // loading animate
-let bar:any = null; // loading bar
-
+let spinner: any = null; // loading animate
+let bar: any = null; // loading bar
 
 /**
  * @desc request api get file tree
@@ -19,7 +18,13 @@ let bar:any = null; // loading bar
  * @param {String} branch
  * @param {String} download
  */
-export function requestUrl(username:string, repos:string, branch:string, download:string) {
+export function requestUrl(
+  username: string,
+  repos: string,
+  branch: string,
+  download: string,
+  filePath: string
+) {
   // request start
   spinner = ora("download start!").start();
   spinner.color = "yellow";
@@ -27,12 +32,12 @@ export function requestUrl(username:string, repos:string, branch:string, downloa
   const url = `https://api.github.com/repos/${username}/${repos}/git/trees/${branch}?recursive=1`;
   axios
     .get(url)
-    .then((res:any) => {
+    .then((res: any) => {
       const data = res.data;
       const trees = data.tree;
-      handleTree(username, repos, branch, trees, download);
+      handleTree(username, repos, branch, trees, download, filePath);
     })
-    .catch((e:any) => {
+    .catch((e: any) => {
       console.log(e);
       spinner.stop();
       console.log(chalk.red(`network is error!`));
@@ -47,7 +52,14 @@ export function requestUrl(username:string, repos:string, branch:string, downloa
  * @param {String} tree
  * @param {String} download
  */
-function handleTree(username:string, repos:string, branch:string, tree:[any], download:string) {
+function handleTree(
+  username: string,
+  repos: string,
+  branch: string,
+  tree: [any],
+  download: string,
+  filePath: string
+) {
   let filterList = tree.filter(item => {
     return item.type === "blob";
   });
@@ -66,7 +78,7 @@ function handleTree(username:string, repos:string, branch:string, tree:[any], do
   });
 
   filterList.map(item => {
-    downloadFile(username, repos, branch, item.path);
+    downloadFile(username, repos, branch, item.path, filePath);
   });
 }
 
@@ -76,15 +88,22 @@ function handleTree(username:string, repos:string, branch:string, tree:[any], do
  * @param {String} branch
  * @param {String} url
  */
-function downloadFile(username:string, repos:string, branch:string, url:string) {
+function downloadFile(
+  username: string,
+  repos: string,
+  branch: string,
+  url: string,
+  filePath: string
+) {
   // download file
-  const exportUrl = path.join(exportBaseUrl, repos, url);
+  const exportUrl = path.join(exportBaseUrl, filePath, path.basename(url));
   const dir = path.dirname(exportUrl);
   // mkdir
   mkdirsSync(dir);
+  console.log(`https://github.com/${username}/${repos}/raw/${branch}/${url}`);
   request(
     `https://github.com/${username}/${repos}/raw/${branch}/${url}`,
-    (err:any, res:any, body:any) => {
+    (err: any, res: any, body: any) => {
       if (err) {
         console.log(logSymbols.error, chalk.red(`${url} is error`));
         return;
@@ -95,7 +114,6 @@ function downloadFile(username:string, repos:string, branch:string, url:string) 
           logSymbols.success,
           chalk.green(`${repos} all files download!`)
         );
-        
       }
     }
   ).pipe(fs.createWriteStream(exportUrl));

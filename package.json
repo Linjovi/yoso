@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Linjovi/tpl-stencil#readme",
   "dependencies": {
+    "@types/inquirer": "^6.0.3",
     "@types/progress": "^2.0.3",
     "@types/request": "^2.48.1",
     "axios": "^0.19.0",

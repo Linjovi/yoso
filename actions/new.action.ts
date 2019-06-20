@@ -28,7 +28,7 @@ export class NewAction extends AbstractAction {
 
     checkDirExist(currentPath + "/" + data.path);
     //read json
-    var tplrcPath = localPathFirst(path.join("stencil","tplconfig",data.model + ".tplrc"));
+    var tplrcPath = localPathFirst(path.join("stencil","tplrc",data.model + ".tplrc"));
     // read tplrc
     var tplrc = JSON.parse(fs.readFileSync(tplrcPath).toString());
     //if fileType is dir
