@@ -14,4 +14,18 @@ export function checkDirExist(folderpath: string) {
   }
 }
 
+/**
+ * @param {String} dirname
+ * @returns
+ */
+export function mkdirsSync(dirname:string) {
+  if (fs.existsSync(dirname)) {
+    return true;
+  }
+  if (mkdirsSync(path.dirname(dirname))) {
+    fs.mkdirSync(dirname);
+    return true;
+  }
+}
+
 

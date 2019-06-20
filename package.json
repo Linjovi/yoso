@@ -21,11 +21,18 @@
   },
   "homepage": "https://github.com/Linjovi/tpl-stencil#readme",
   "dependencies": {
+    "@types/progress": "^2.0.3",
+    "@types/request": "^2.48.1",
+    "axios": "^0.19.0",
     "commander": "^2.20.0",
-    "download-git-repo": "^2.0.0",
     "ink": "^2.2.0",
+    "inquirer": "^6.3.1",
+    "log-symbols": "^3.0.0",
     "nunjucks": "^3.2.0",
-    "react": "^16.8.6"
+    "ora": "^3.4.0",
+    "progress": "^2.0.3",
+    "react": "^16.8.6",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "@types/commander": "^2.12.2",
