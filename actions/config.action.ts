@@ -29,6 +29,11 @@ export class ConfigAction extends AbstractAction {
           name: "branch",
           message: "config your repos branch name",
           default: config.branch || null
+        },{
+          type: "input",
+          name: "token",
+          message: "config you github token (not necessary)",
+          default:config.token || null
         }
       ])
       .then((answers: any) => {

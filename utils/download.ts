@@ -30,15 +30,18 @@ export function requestUrl(
   spinner.color = "yellow";
   spinner.text = "loading...";
   const url = `https://api.github.com/repos/${username}/${repos}/git/trees/${branch}?recursive=1`;
+  var config = JSON.parse(
+    fs.readFileSync(`${path.dirname(__dirname)}/stencil/.tplconfig`).toString()
+  );
   axios
-    .get(url)
+    .get(url,{headers:{Authorization: `token ${config.token}`}})
     .then((res: any) => {
       const data = res.data;
       const trees = data.tree;
       handleTree(username, repos, branch, trees, download, filePath);
     })
     .catch((e: any) => {
-      console.log(e);
+      // console.log(e);
       spinner.stop();
       console.log(chalk.red(`network is error!`));
     });

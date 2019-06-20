@@ -4,7 +4,7 @@ import { Tplrc } from "./action.input";
 import * as fs from "fs";
 import * as nunjucks from "nunjucks";
 import * as path from "path";
-import { checkDirExist } from "../utils/utils";
+import { checkDirExist, isRewrite } from "../utils/utils";
 var filePath = path.dirname(__dirname); //tpl-stencil根目录
 var currentPath = process.cwd(); //当前目录
 var rootPath = path.dirname(currentPath); //当前工程父级目录
@@ -13,8 +13,6 @@ var data: any;
 
 export class NewAction extends AbstractAction {
   public async handle(inputs: NewCmd) {
-    console.log("filePath:" + filePath);
-    console.log("currentpath:" + currentPath);
     var name = path.basename(inputs.path);
     var dirPath = path.dirname(inputs.path);
 
@@ -34,11 +32,15 @@ export class NewAction extends AbstractAction {
     var tplrc = JSON.parse(fs.readFileSync(tplrcPath).toString());
     //if fileType is dir
     if (tplrc.fileType === 1) {
-      checkDirExist(currentPath + "/" + data.fullPath);
-      data.path = data.fullPath;
+      isRewrite(inputs.path, function() {
+        checkDirExist(currentPath + "/" + data.fullPath);
+        data.path = data.fullPath;
+        tplrc.children.forEach(generateFileWithTplrc);
+      });
+    }else{
+      tplrc.children.forEach(generateFileWithTplrc);
     }
-
-    tplrc.children.forEach(generateFileWithTplrc);
+    
   }
 }
 

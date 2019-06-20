@@ -1,5 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
+import * as inquirer from "inquirer";
+import { NewCmd } from "../commands";
 
 export function checkDirExist(folderpath: string) {
   const pathArr = folderpath.split(path.sep);
@@ -25,5 +27,28 @@ export function mkdirsSync(dirname: string) {
   if (mkdirsSync(path.dirname(dirname))) {
     fs.mkdirSync(dirname);
     return true;
+  }
+}
+
+export async function isRewrite(path:string,callback:Function){
+  if (fs.existsSync(path)) {
+    await inquirer
+      .prompt([
+        {
+          type: "confirm",
+          name: "rewrite",
+          message: `The path '${
+            path
+          }' is already exists, do you want to rewrite?`,
+          default: false
+        }
+      ])
+      .then((answers: any) => {
+        if (answers.rewrite) {
+          callback()
+        }
+      });
+  } else {
+    callback();
   }
 }
