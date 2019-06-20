@@ -100,7 +100,6 @@ function downloadFile(
   const dir = path.dirname(exportUrl);
   // mkdir
   mkdirsSync(dir);
-  console.log(`https://github.com/${username}/${repos}/raw/${branch}/${url}`);
   request(
     `https://github.com/${username}/${repos}/raw/${branch}/${url}`,
     (err: any, res: any, body: any) => {
