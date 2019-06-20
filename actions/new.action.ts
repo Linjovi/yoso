@@ -5,20 +5,19 @@ import * as fs from "fs";
 import * as nunjucks from "nunjucks";
 import * as path from "path";
 import { checkDirExist } from "../utils/utils";
-var filePath = path.dirname(__dirname);//tpl-stencil根目录
-var currentPath = process.cwd();//当前目录
-var rootPath = path.dirname(currentPath);//当前工程父级目录
+var filePath = path.dirname(__dirname); //tpl-stencil根目录
+var currentPath = process.cwd(); //当前目录
+var rootPath = path.dirname(currentPath); //当前工程父级目录
 
 var data: any;
 
 export class NewAction extends AbstractAction {
-
   public async handle(inputs: NewCmd) {
-    console.log("filePath:"+filePath)
-    console.log("currentpath:"+currentPath)
+    console.log("filePath:" + filePath);
+    console.log("currentpath:" + currentPath);
     var name = path.basename(inputs.path);
     var dirPath = path.dirname(inputs.path);
-    
+
     data = {
       model: inputs.tpl,
       fullPath: inputs.path,
@@ -28,7 +27,9 @@ export class NewAction extends AbstractAction {
 
     checkDirExist(currentPath + "/" + data.path);
     //read json
-    var tplrcPath = localPathFirst(path.join("stencil","tplrc",data.model + ".tplrc"));
+    var tplrcPath = localPathFirst(
+      path.join("stencil", "tplrc", data.model + ".tplrc")
+    );
     // read tplrc
     var tplrc = JSON.parse(fs.readFileSync(tplrcPath).toString());
     //if fileType is dir
@@ -47,7 +48,7 @@ const generateFileWithTplrc = (tplrc: Tplrc) => {
   tplrc.tpl = tplrc.tpl || tplrc.type;
 
   // read tpl
-  var tplPath = localPathFirst(path.join("stencil","tpl",tplrc.tpl + ".tpl"));
+  var tplPath = localPathFirst(path.join("stencil", "tpl", tplrc.tpl + ".tpl"));
   var tpl = fs.readFileSync(tplPath).toString();
 
   // tpl compile
@@ -60,8 +61,8 @@ const generateFileWithTplrc = (tplrc: Tplrc) => {
   );
 };
 
-const localPathFirst = (relativePath:string) => {
-  const localPath = path.join(currentPath,relativePath);
-  const libPath = path.join(filePath,relativePath);
-  return fs.existsSync(localPath)?localPath:libPath;
-}
+const localPathFirst = (relativePath: string) => {
+  const localPath = path.join(currentPath, relativePath);
+  const libPath = path.join(filePath, relativePath);
+  return fs.existsSync(localPath) ? localPath : libPath;
+};

@@ -6,5 +6,5 @@ export interface Input {
 export interface NewCmd {
   path: string;
   tpl: string;
-  options : any;
+  options: any;
 }
