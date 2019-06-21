@@ -1,4 +1,4 @@
-import { mkdirsSync } from "./utils";
+import { mkdirsSync, generateFileFromTpl } from "./utils";
 import * as fs from "fs";
 import * as path from "path";
 import * as ProgressBar from "progress";
@@ -34,14 +34,13 @@ export function requestUrl(
     fs.readFileSync(`${path.dirname(__dirname)}/stencil/.tplconfig`).toString()
   );
   axios
-    .get(url,{headers:{Authorization: `token ${config.token}`}})
+    .get(url, { headers: { Authorization: `token ${config.token}` } })
     .then((res: any) => {
       const data = res.data;
       const trees = data.tree;
       handleTree(username, repos, branch, trees, download, filePath);
     })
     .catch((e: any) => {
-      // console.log(e);
       spinner.stop();
       console.log(chalk.red(`network is error!`));
     });
@@ -59,27 +58,30 @@ function handleTree(
   username: string,
   repos: string,
   branch: string,
-  tree: [any],
+  trees: [any],
   download: string,
   filePath: string
 ) {
-  let filterList = tree.filter(item => {
+  let filterList = trees.filter(item => {
     return item.type === "blob";
   });
   if (download !== "") {
     filterList = filterList.filter(item => {
-      // create reg
-      const downRepl = download.replace(/\//g, "\\/").replace(/\./g, "\\.");
-      const reg = new RegExp(`^${downRepl}`);
-      return reg.test(item.path);
+      return item.path.split("/")[0].split(".")[0] === download;
     });
   }
-  // request list is ready
+
   spinner.stop();
+
+  if(filterList.length === 0){
+    console.log(chalk.red(`cannot found template '${download}'!`));
+    return;
+  }
+  // request list is ready
+  
   bar = new ProgressBar(":bar :current/:total", {
     total: filterList.length
   });
-
   filterList.map(item => {
     downloadFile(username, repos, branch, item.path, filePath);
   });
@@ -98,11 +100,12 @@ function downloadFile(
   url: string,
   filePath: string
 ) {
-  // download file
-  const exportUrl = path.join(exportBaseUrl, filePath, path.basename(url));
+  // rename
+  const exportUrl = rename(url, filePath);
   const dir = path.dirname(exportUrl);
   // mkdir
   mkdirsSync(dir);
+  //download
   request(
     `https://github.com/${username}/${repos}/raw/${branch}/${url}`,
     (err: any, res: any, body: any) => {
@@ -110,6 +113,9 @@ function downloadFile(
         console.log(logSymbols.error, chalk.red(`${url} is error`));
         return;
       }
+
+      generateFileFromTpl(body, { name: path.basename(filePath) }, exportUrl);
+
       bar.tick();
       if (bar.complete) {
         console.log(
@@ -118,5 +124,15 @@ function downloadFile(
         );
       }
     }
-  ).pipe(fs.createWriteStream(exportUrl));
+  );
+}
+
+function rename(url: string, filePath: string) {
+  let pathList = url.split("/");
+  let nameList = pathList[0].split(".");
+  nameList[0] = filePath;
+  let name = nameList.join(".");
+  pathList[0] = name;
+  let realPath = pathList.join("/");
+  return path.join(exportBaseUrl, realPath);
 }

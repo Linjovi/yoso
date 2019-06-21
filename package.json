@@ -1,6 +1,6 @@
 {
   "name": "tpl-stencil",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "",
   "bin": {
     "tpl": "bin/tpl.js"
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Linjovi/tpl-stencil#readme",
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/inquirer": "^6.0.3",
     "@types/progress": "^2.0.3",
     "@types/request": "^2.48.1",

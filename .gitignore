@@ -10,8 +10,12 @@ commands/**/*.js
 actions/**/*.js
 bin/**/*.js
 utils/**/*.js
+component/**/*.js
+ui/**/*.js
 lib/**/*.d.ts
 commands/**/*.d.ts
 actions/**/*.d.ts
 bin/**/*.d.ts
 utils/**/*.d.ts
+component/**/*.d.ts
+ui/**/*.d.ts

@@ -2,6 +2,8 @@ import { AbstractAction } from "./abstract.action";
 import * as fs from "fs";
 import * as path from "path";
 import * as inquirer from "inquirer";
+import * as logSymbols from "log-symbols";
+import chalk from "chalk";
 
 var filePath = path.dirname(__dirname); //tpl-stencil根目录
 
@@ -42,6 +44,10 @@ export class ConfigAction extends AbstractAction {
           JSON.stringify(answers)
         );
         console.log(answers);
+        console.log(
+          logSymbols.success,
+          chalk.green("config accomplish!")
+        );
       });
   }
 }

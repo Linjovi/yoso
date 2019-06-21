@@ -1,5 +1,9 @@
 # tpl-stencil
 This is a node command-line tool that automatically creates files from templates
+## Start
+```
+npm install -g tpl-stencil
+```
 ## First use
 Register the github user name, repos name, and branch name where your templates are stored
 ```
@@ -14,7 +18,8 @@ example
 ```
 tpl init myComponent src/views/components/helloComponent
 ```
-If there is no local-anme, it is inited by default in the root directory with the same file name as the template file name
+The template can be a folder or a separate file.
+If there is no local-path, it is inited by default in the root directory with the same file name as the template file name
 ## Create from template in local
 ```
 tpl create <tplrc-name> <local-path>
