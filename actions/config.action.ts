@@ -4,14 +4,13 @@ import * as path from "path";
 import * as inquirer from "inquirer";
 import * as logSymbols from "log-symbols";
 import chalk from "chalk";
+import {readConfig} from "../utils/utils"
 
 var filePath = path.dirname(__dirname); //tpl-stencil根目录
 
 export class ConfigAction extends AbstractAction {
   public async handle() {
-    var config = JSON.parse(
-      fs.readFileSync(`${filePath}/stencil/.tplconfig`).toString()
-    );
+    var config = readConfig();
     
     inquirer
       .prompt([

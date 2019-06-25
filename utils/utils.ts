@@ -67,3 +67,14 @@ export function rename(url: string, filePath: string) {
   let realPath = pathList.join("/");
   return path.join(currentPath, realPath);
 }
+
+export function readConfig(){
+  const configPath = `${path.dirname(__dirname)}/stencil/.tplconfig`
+  if (!fs.existsSync(configPath)){
+    fs.writeFileSync(configPath, '{"username":"","repos":"","branch":"","token":""}');
+  }
+  var config = JSON.parse(
+    fs.readFileSync(configPath).toString()
+  );
+  return config
+}

@@ -3,6 +3,7 @@
 node_modules/
 .DS_Store
 .history
+stencil/.tplconfig
 
 # output
 lib/**/*.js

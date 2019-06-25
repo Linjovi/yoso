@@ -1,6 +1,7 @@
 .idea/
 .gitignore
 
+stencil/.tplconfig
 # source
 **/*.ts
 *.ts

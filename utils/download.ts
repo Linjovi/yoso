@@ -1,4 +1,4 @@
-import { mkdirsSync, generateFileFromTpl,rename } from "./utils";
+import { mkdirsSync, generateFileFromTpl, rename ,readConfig} from "./utils";
 import * as fs from "fs";
 import * as path from "path";
 import * as ProgressBar from "progress";
@@ -30,11 +30,11 @@ export function requestUrl(
   spinner.color = "yellow";
   spinner.text = "loading...";
   const url = `https://api.github.com/repos/${username}/${repos}/git/trees/${branch}?recursive=1`;
-  var config = JSON.parse(
-    fs.readFileSync(`${path.dirname(__dirname)}/stencil/.tplconfig`).toString()
-  );
+  var config = readConfig();
   axios
-    .get(url, { headers: { Authorization: `token ${config.token}` } })
+    .get(url, {
+      headers: { Authorization: config.token ? `token ${config.token}` : "" }
+    })
     .then((res: any) => {
       const data = res.data;
       const trees = data.tree;
@@ -42,7 +42,17 @@ export function requestUrl(
     })
     .catch((e: any) => {
       spinner.stop();
-      console.log(chalk.red(`network is error!`));
+      switch (e.response.status) {
+        case 401:
+          console.log(chalk.red(`Unauthorized! Update your token`));
+          break;
+        case 403:
+          console.log(chalk.red(`Forbidden! Config your github token`));
+          break;
+        default:
+          console.log(chalk.red(`network is error!`));
+          break;
+      }
     });
 }
 
@@ -73,12 +83,12 @@ function handleTree(
 
   spinner.stop();
 
-  if(filterList.length === 0){
+  if (filterList.length === 0) {
     console.log(chalk.red(`cannot found template '${download}'!`));
     return;
   }
   // request list is ready
-  
+
   bar = new ProgressBar(":bar :current/:total", {
     total: filterList.length
   });
