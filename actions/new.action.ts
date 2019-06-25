@@ -1,10 +1,10 @@
 import { NewCmd } from "../commands";
 import { AbstractAction } from "./abstract.action";
-import { Tplrc } from "./action.input";
 import * as fs from "fs";
-import * as nunjucks from "nunjucks";
 import * as path from "path";
-import { checkDirExist, isRewrite } from "../utils/utils";
+import { checkDirExist, isRewrite, rename,generateFileFromTpl } from "../utils/utils";
+import { directoryTree } from "../utils/fileTree";
+
 var filePath = path.dirname(__dirname); //tpl-stencil根目录
 var currentPath = process.cwd(); //当前目录
 var rootPath = path.dirname(currentPath); //当前工程父级目录
@@ -22,49 +22,44 @@ export class NewAction extends AbstractAction {
       name: name,
       path: dirPath
     };
+    let res:any = []
+    var Finder = require("fs-finder");
 
-    checkDirExist(currentPath + "/" + data.path);
-    //read json
-    var tplrcPath = localPathFirst(
-      path.join("stencil", "tplrc", data.model + ".tplrc")
+    let fileExists = Finder.in(path.join(filePath, "stencil", "tpl")).findFiles(
+      data.model
+    ).length;
+    let dirExists = fs.existsSync(
+      path.join(filePath, "stencil", "tpl", data.model)
     );
-    // read tplrc
-    var tplrc = JSON.parse(fs.readFileSync(tplrcPath).toString());
-    //if fileType is dir
-    if (tplrc.fileType === 1) {
-      isRewrite(inputs.path, function() {
-        checkDirExist(currentPath + "/" + data.fullPath);
-        data.path = data.fullPath;
-        tplrc.children.forEach(generateFileWithTplrc);
-      });
-    }else{
-      tplrc.children.forEach(generateFileWithTplrc);
+    if (fileExists + dirExists > 1) {
+      console.log("more than one");
+      return;
+    } else if (fileExists + dirExists < 1) {
+      console.log("not found");
+      return;
+    } else {
+      if (dirExists) {//文件夹
+
+        directoryTree(path.join(filePath, "stencil", "tpl", data.model), res);
+        res.forEach((element: any) => {
+          element.path = rename(element.url, data.fullPath);
+        });
+      } else {//文件
+        var item = Finder.in(path.join(filePath, "stencil", "tpl")).findFiles(
+          data.model
+        )[0]
+        var url = path.relative(path.join(filePath,"stencil","tpl"),item)
+        res = [{url,path:rename(url,data.fullPath)}]
+      }
     }
-    
+
+    isRewrite(data.fullPath,function(){
+      checkDirExist(currentPath + "/" + data.fullPath);
+      res.forEach((item:any)=>{
+        var tpl = fs.readFileSync(path.join(filePath,'stencil','tpl',item.url)).toString();
+        generateFileFromTpl(tpl, data, item.path);
+      })
+    })
+
   }
 }
-
-const generateFileWithTplrc = (tplrc: Tplrc) => {
-  const suffix = tplrc.type;
-  const name = tplrc.name ? tplrc.name : data.name;
-  tplrc.tpl = tplrc.tpl || tplrc.type;
-
-  // read tpl
-  var tplPath = localPathFirst(path.join("stencil", "tpl", tplrc.tpl + ".tpl"));
-  var tpl = fs.readFileSync(tplPath).toString();
-
-  // tpl compile
-  var compiledData = nunjucks.renderString(tpl, data);
-
-  // write file
-  fs.writeFileSync(
-    currentPath + "/" + data.path + "/" + name + "." + suffix,
-    compiledData
-  );
-};
-
-const localPathFirst = (relativePath: string) => {
-  const localPath = path.join(currentPath, relativePath);
-  const libPath = path.join(filePath, relativePath);
-  return fs.existsSync(localPath) ? localPath : libPath;
-};

@@ -113,7 +113,6 @@ function downloadFile(
         console.log(logSymbols.error, chalk.red(`${url} is error`));
         return;
       }
-
       generateFileFromTpl(body, { name: path.basename(filePath) }, exportUrl);
 
       bar.tick();

@@ -1,6 +1,6 @@
 {
   "name": "tpl-stencil",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "bin": {
     "tpl": "bin/tpl.js"
@@ -27,6 +27,7 @@
     "@types/request": "^2.48.1",
     "axios": "^0.19.0",
     "commander": "^2.20.0",
+    "fs-finder": "^1.8.1",
     "ink": "^2.2.0",
     "inquirer": "^6.3.1",
     "log-symbols": "^3.0.0",

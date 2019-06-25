@@ -4,7 +4,7 @@ import * as inquirer from "inquirer";
 import { NewCmd } from "../commands";
 import { generate } from "rxjs";
 import * as nunjucks from "nunjucks";
-
+var currentPath = process.cwd(); //当前目录
 export function checkDirExist(folderpath: string) {
   const pathArr = folderpath.split(path.sep);
   let _path = "";
@@ -56,4 +56,14 @@ export async function isRewrite(path: string, callback: Function) {
 export function generateFileFromTpl(tpl: string, data: any, exportUrl: string) {
   var compiledData = nunjucks.renderString(tpl, data);
   fs.writeFileSync(exportUrl, compiledData);
+}
+
+export function rename(url: string, filePath: string) {
+  let pathList = url.split("/");
+  let nameList = pathList[0].split(".");
+  nameList[0] = filePath;
+  let name = nameList.join(".");
+  pathList[0] = name;
+  let realPath = pathList.join("/");
+  return path.join(currentPath, realPath);
 }

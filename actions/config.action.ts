@@ -12,6 +12,7 @@ export class ConfigAction extends AbstractAction {
     var config = JSON.parse(
       fs.readFileSync(`${filePath}/stencil/.tplconfig`).toString()
     );
+    
     inquirer
       .prompt([
         {
