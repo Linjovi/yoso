@@ -1,4 +1,4 @@
-import { mkdirsSync, generateFileFromTpl } from "./utils";
+import { mkdirsSync, generateFileFromTpl,rename } from "./utils";
 import * as fs from "fs";
 import * as path from "path";
 import * as ProgressBar from "progress";
@@ -124,14 +124,4 @@ function downloadFile(
       }
     }
   );
-}
-
-function rename(url: string, filePath: string) {
-  let pathList = url.split("/");
-  let nameList = pathList[0].split(".");
-  nameList[0] = filePath;
-  let name = nameList.join(".");
-  pathList[0] = name;
-  let realPath = pathList.join("/");
-  return path.join(exportBaseUrl, realPath);
 }

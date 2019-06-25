@@ -17,8 +17,7 @@ function safeReadDirSync (path:string) {
 }
 
 /**
- * Collects the files and folders for a directory path into an Object, subject
- * to the options supplied, and invoking optional
+ * 返回值中的url为与root/stencil/tpl的相对路径
  * @param  {String} path
  * @return {Object}
  */
@@ -31,7 +30,7 @@ export function directoryTree (path:string,res:any) {
 	if (stats.isFile()) {
     // Skip if it does not match the extension regex
     var filePath = PATH.dirname(__dirname); //tpl-stencil根目录
-    res.push({url:PATH.relative(PATH.join(filePath,'stencil','tpl'),path)});
+    res.add({url:PATH.relative(PATH.join(filePath,'stencil','tpl'),path)});
 	}
 	else if (stats.isDirectory()) {
 		let dirData:any = safeReadDirSync(path);

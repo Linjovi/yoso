@@ -1,10 +1,10 @@
 import * as path from "path";
 import * as fs from "fs";
 import * as inquirer from "inquirer";
-import { NewCmd } from "../commands";
-import { generate } from "rxjs";
 import * as nunjucks from "nunjucks";
+
 var currentPath = process.cwd(); //当前目录
+
 export function checkDirExist(folderpath: string) {
   const pathArr = folderpath.split(path.sep);
   let _path = "";

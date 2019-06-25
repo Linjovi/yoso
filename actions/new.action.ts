@@ -22,7 +22,7 @@ export class NewAction extends AbstractAction {
       name: name,
       path: dirPath
     };
-    let res:any = []
+    let res:any = new Set()
     var Finder = require("fs-finder");
 
     let fileExists = Finder.in(path.join(filePath, "stencil", "tpl")).findFiles(
@@ -60,6 +60,6 @@ export class NewAction extends AbstractAction {
         generateFileFromTpl(tpl, data, item.path);
       })
     })
-
+    console.log(res);
   }
 }
