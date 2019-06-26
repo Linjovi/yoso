@@ -11,8 +11,11 @@ export class InitCommand extends AbstractCommand {
       .option("-b, --branch <branch>", "choose branch")
       .option("-u, --username <username>", "choose username")
       .option("-r, --repo <repo>", "choose repo")
+      .option("-o, --options","add options")
       .action(async (tpl: string, path: string, command: Command) => {
-        let inputs: NewCmd = { path, tpl, options: command };
+        let {branch,username,rpos} = command;
+        let options = {branch,username,rpos}
+        let inputs: NewCmd = { path, tpl, options: options };
         await this.action.handle(inputs);
       });
   }

@@ -1,13 +1,11 @@
-import { mkdirsSync, generateFileFromTpl, rename ,readConfig} from "./utils";
-import * as fs from "fs";
+import { mkdirsSync, generateFileFromTpl, rename, readConfig } from "./utils";
+import Request from "./request";
 import * as path from "path";
 import * as ProgressBar from "progress";
 import * as logSymbols from "log-symbols";
-import * as request from "request";
-import axios from "axios";
 import chalk from "chalk";
 import ora from "ora";
-const exportBaseUrl = path.join(process.cwd(), "");
+import { isTemplateElement } from "@babel/types";
 let spinner: any = null; // loading animate
 let bar: any = null; // loading bar
 
@@ -30,29 +28,15 @@ export function requestUrl(
   spinner.color = "yellow";
   spinner.text = "loading...";
   const url = `https://api.github.com/repos/${username}/${repos}/git/trees/${branch}?recursive=1`;
-  var config = readConfig();
-  axios
-    .get(url, {
-      headers: { Authorization: config.token ? `token ${config.token}` : "" }
-    })
+
+  Request({ url, method: "get" })
     .then((res: any) => {
       const data = res.data;
       const trees = data.tree;
       handleTree(username, repos, branch, trees, download, filePath);
     })
-    .catch((e: any) => {
+    .catch(() => {
       spinner.stop();
-      switch (e.response.status) {
-        case 401:
-          console.log(chalk.red(`Unauthorized! Update your token`));
-          break;
-        case 403:
-          console.log(chalk.red(`Forbidden! Config your github token`));
-          break;
-        default:
-          console.log(chalk.red(`network is error!`));
-          break;
-      }
     });
 }
 
@@ -72,13 +56,27 @@ function handleTree(
   download: string,
   filePath: string
 ) {
-  let filterList = trees.filter(item => {
+  let fileList = trees.filter(item => {
     return item.type === "blob";
   });
-  if (download !== "") {
-    filterList = filterList.filter(item => {
-      return item.path.split("/")[0].split(".")[0] === download;
+  let filterList = [];
+
+  if (download.includes(".")) {
+    //有.代表一定是单个文件模板
+    filterList = fileList.filter(item => {
+      return item.path === download;
     });
+  } else {
+    //可能是单个文件或文件夹，如果有重名的，优先下载文件夹模板
+    filterList = fileList.filter(item => {
+      return item.path.split("/")[0] === download;
+    });
+    if (filterList.length === 0) {
+      //没有重名文件夹，下载文件
+      filterList = fileList.filter(item => {
+        return item.path.split(".")[0] === download;
+      });
+    }
   }
 
   spinner.stop();
@@ -116,15 +114,16 @@ function downloadFile(
   // mkdir
   mkdirsSync(dir);
   //download
-  request(
-    `https://github.com/${username}/${repos}/raw/${branch}/${url}`,
-    (err: any, res: any, body: any) => {
-      if (err) {
-        console.log(logSymbols.error, chalk.red(`${url} is error`));
-        return;
-      }
-      generateFileFromTpl(body, { name: path.basename(filePath) }, exportUrl);
-
+  Request({
+    url: `https://github.com/${username}/${repos}/raw/${branch}/${url}`,
+    method: "get"
+  })
+    .then(res => {
+      generateFileFromTpl(
+        res.data,
+        { name: path.basename(filePath) },
+        exportUrl
+      );
       bar.tick();
       if (bar.complete) {
         console.log(
@@ -132,6 +131,9 @@ function downloadFile(
           chalk.green(`${repos} all files download!`)
         );
       }
-    }
-  );
+    })
+    .catch(err => {
+      console.log(logSymbols.error, chalk.red(`${url} is error`));
+      return;
+    });
 }

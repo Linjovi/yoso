@@ -2,6 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 import * as inquirer from "inquirer";
 import * as nunjucks from "nunjucks";
+import {tplConfig} from "../actions/action.input";
 
 var currentPath = process.cwd(); //当前目录
 
@@ -68,7 +69,7 @@ export function rename(url: string, filePath: string) {
   return path.join(currentPath, realPath);
 }
 
-export function readConfig(){
+export function readConfig():tplConfig{
   const configPath = `${path.dirname(__dirname)}/stencil/.tplconfig`
   if (!fs.existsSync(configPath)){
     fs.writeFileSync(configPath, '{"username":"","repos":"","branch":"","token":""}');

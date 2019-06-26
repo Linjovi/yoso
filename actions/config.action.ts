@@ -18,24 +18,24 @@ export class ConfigAction extends AbstractAction {
           type: "input",
           name: "username",
           message: "config your github user name",
-          default: config.username || null
+          default: config.username || undefined
         },
         {
           type: "input",
           name: "repos",
           message: "config your github repos name",
-          default: config.repos || null
+          default: config.repos || undefined
         },
         {
           type: "input",
           name: "branch",
           message: "config your repos branch name",
-          default: config.branch || null
+          default: config.branch || undefined
         },{
           type: "input",
           name: "token",
           message: "config you github token (not necessary)",
-          default:config.token || null
+          default:config.token || undefined
         }
       ])
       .then((answers: any) => {

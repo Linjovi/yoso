@@ -1,4 +1,4 @@
-import { rename } from "../utils/utils";
+import { rename,generateFileFromTpl } from "../utils/utils";
 var currentPath = process.cwd();
 
 describe("utils/rename 测试", () => {
