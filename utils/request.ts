@@ -9,9 +9,9 @@ const instance = axios.create({
 instance.interceptors.request.use(
   config => {
     // do something before request is sent
-    let tplConfig = readConfig();
-    if (tplConfig.token) {
-      config.headers.common["Authorization"] = `Token ${tplConfig.token}`;
+    let yosoConfig = readConfig();
+    if (yosoConfig.token) {
+      config.headers.common["Authorization"] = `Token ${yosoConfig.token}`;
     }
     return config;
   },

@@ -1,7 +1,7 @@
 .idea/
 .gitignore
 
-stencil/.tplconfig
+yoso/.yosoconfig
 # source
 **/*.ts
 *.ts

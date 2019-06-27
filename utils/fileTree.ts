@@ -17,7 +17,7 @@ function safeReadDirSync (path:string) {
 }
 
 /**
- * 返回值中的url为与root/stencil/tpl的相对路径
+ * 返回值中的url为与root/yoso/tpl的相对路径
  * @param  {String} path
  * @return {Object}
  */
@@ -29,8 +29,8 @@ export function directoryTree (path:string,res:any) {
 
 	if (stats.isFile()) {
     // Skip if it does not match the extension regex
-    var filePath = PATH.dirname(__dirname); //tpl-stencil根目录
-    res.add({url:PATH.relative(PATH.join(filePath,'stencil','tpl'),path)});
+    var filePath = PATH.dirname(__dirname); //yoso根目录
+    res.add({url:PATH.relative(PATH.join(filePath,'yoso','tpl'),path)});
 	}
 	else if (stats.isDirectory()) {
 		let dirData:any = safeReadDirSync(path);

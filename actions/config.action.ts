@@ -6,7 +6,7 @@ import * as logSymbols from "log-symbols";
 import chalk from "chalk";
 import {readConfig} from "../utils/utils"
 
-var filePath = path.dirname(__dirname); //tpl-stencil根目录
+var filePath = path.dirname(__dirname); //yoso根目录
 
 export class ConfigAction extends AbstractAction {
   public async handle() {
@@ -40,7 +40,7 @@ export class ConfigAction extends AbstractAction {
       ])
       .then((answers: any) => {
         fs.writeFileSync(
-          `${filePath}/stencil/.tplconfig`,
+          `${filePath}/yoso/.yosoconfig`,
           JSON.stringify(answers)
         );
         console.log(answers);

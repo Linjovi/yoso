@@ -7,7 +7,7 @@ import { requestUrl } from "../utils/download";
 import * as inquirer from "inquirer";
 import {isRewrite,readConfig} from "../utils/utils";
 
-var filePath = path.dirname(__dirname); //tpl-stencil根目录
+var filePath = path.dirname(__dirname); //yoso根目录
 
 export class InitAction extends AbstractAction {
   public async handle(inputs: NewCmd) {

@@ -1,6 +1,6 @@
 import { directoryTree } from "../utils/fileTree";
 import * as PATH from "path";
-var filePath = PATH.dirname(__dirname); //tpl-stencil根目录
+var filePath = PATH.dirname(__dirname); //yoso根目录
 describe("fileTree 测试", () => {
   it("fileTree", () => {
     var res = new Set();

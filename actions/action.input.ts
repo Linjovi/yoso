@@ -1,5 +1,5 @@
 
-export interface tplConfig {
+export interface yosoConfig {
   username: string;
   repos: string;
   branch: string;

@@ -11,7 +11,7 @@ import {
 } from "../utils/utils";
 import { directoryTree } from "../utils/fileTree";
 
-var filePath = path.dirname(__dirname); //tpl-stencil根目录
+var filePath = path.dirname(__dirname); //yoso根目录
 var currentPath = process.cwd(); //当前目录
 
 var data: any;
@@ -44,7 +44,7 @@ export class NewAction extends AbstractAction {
       res.forEach((item: any) => {
         checkDirExist(path.dirname(item.path));
         var tpl = fs
-          .readFileSync(path.join(filePath, "stencil", "tpl", item.url))
+          .readFileSync(path.join(filePath, "yoso", "tpl", item.url))
           .toString();
         generateFileFromTpl(tpl, options, item.path);
       });
@@ -55,10 +55,10 @@ export class NewAction extends AbstractAction {
 function loadLocalTpl(tplPath: string, toPath: string) {
   let res: any = new Set();
   var Finder = require("fs-finder");
-  let fileExists = Finder.in(path.join(filePath, "stencil", "tpl")).findFiles(
+  let fileExists = Finder.in(path.join(filePath, "yoso", "tpl")).findFiles(
     tplPath
   ).length;
-  let dirExists = fs.existsSync(path.join(filePath, "stencil", "tpl", tplPath));
+  let dirExists = fs.existsSync(path.join(filePath, "yoso", "tpl", tplPath));
 
   if (fileExists + dirExists > 1) {
     console.log("more than one");
@@ -70,13 +70,13 @@ function loadLocalTpl(tplPath: string, toPath: string) {
     if (dirExists) {
       //文件夹
 
-      directoryTree(path.join(filePath, "stencil", "tpl", tplPath), res);
+      directoryTree(path.join(filePath, "yoso", "tpl", tplPath), res);
     } else {
       //文件
-      var item = Finder.in(path.join(filePath, "stencil", "tpl")).findFiles(
+      var item = Finder.in(path.join(filePath, "yoso", "tpl")).findFiles(
         tplPath
       )[0];
-      var url = path.relative(path.join(filePath, "stencil", "tpl"), item);
+      var url = path.relative(path.join(filePath, "yoso", "tpl"), item);
       res = [{ url }];
     }
 
