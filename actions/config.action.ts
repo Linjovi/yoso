@@ -30,7 +30,7 @@ export class ConfigAction extends AbstractAction {
           type: "input",
           name: "branch",
           message: "config your repos branch name",
-          default: config.branch || undefined
+          default: config.branch || "master"
         },{
           type: "input",
           name: "token",

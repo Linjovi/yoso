@@ -21,7 +21,7 @@ function initTpl(inputs: NewCmd) {
   var data = {
     username: inputs.options.username || config.username,
     repos: inputs.options.repos || config.repos,
-    branch: inputs.options.branch || config.branch,
+    branch: inputs.options.branch || config.branch || "master",
     download: inputs.tpl,
     path: inputs.path || inputs.tpl
   };
