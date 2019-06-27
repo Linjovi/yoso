@@ -1,5 +1,6 @@
 # YOSO[![npm](https://img.shields.io/npm/v/yoso.svg?maxAge=2592000)](https://www.npmjs.com/package/yoso)
 [中文文档](./readme_zh.md)
+
 This is a command line tool that automatically generates files from custom templates. You only need to set it once before you can reuse it.
 
 ## Install
