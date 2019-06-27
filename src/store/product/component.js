@@ -1,6 +1,6 @@
 /**
- * {{name}} 组件实现文件
- * author {{author}} {{email}}
+ * product 组件实现文件
+ * author jovi jovi_lin@outlook.com
  * @version  1.0
  * @author  
  * @module   
@@ -12,7 +12,7 @@ NEJ.define([
 ){
     var g = window;
     /**
-     * {{name}} 组件
+     * product 组件
      *
      * @class   
      * @extends module:pool/component-base/src/base.Component
@@ -20,7 +20,7 @@ NEJ.define([
      * @param {Object} options      - 组件构造参数
      * @param {Object} options.data - 与视图关联的数据模型
      */
-    var {{name}} = Component.$extends({
+    var product = Component.$extends({
 
         /**
          * 模板编译前用来初始化参数
@@ -65,5 +65,5 @@ NEJ.define([
         }
     });
 
-    return {{name}};
+    return product;
 });

@@ -10,9 +10,10 @@ export class NewCommand extends AbstractCommand {
       .description(
         "Generate File From tplrc, example: tpl new vue src/views/demo"
       )
-      // .option("-t, --tpl <tpl>", "choose tpl")
+      .option("-o, --others", "add other options")
       .action(async (tpl: string, path: string, command: Command) => {
-        let inputs: NewCmd = { path, tpl, options: command };
+        let others = !!command.others
+        let inputs: NewCmd = { path, tpl, options: {others} };
         await this.action.handle(inputs);
       });
   }

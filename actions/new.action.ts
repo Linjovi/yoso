@@ -2,6 +2,7 @@ import { NewCmd } from "../commands";
 import { AbstractAction } from "./abstract.action";
 import * as fs from "fs";
 import * as path from "path";
+import { getGitInfo } from "../utils/info";
 import {
   checkDirExist,
   isRewrite,
@@ -18,22 +19,28 @@ var data: any;
 export class NewAction extends AbstractAction {
   public async handle(inputs: NewCmd) {
     var name = path.basename(inputs.path);
+    const gitInfo = getGitInfo()
 
+    var options: {[k: string]: any} = {name}
+
+    if(gitInfo.name){
+      options.author = gitInfo.name
+    }
+    if(gitInfo.email){
+      options.email = gitInfo.email
+    }
+    console.log(gitInfo);
     data = {
       model: inputs.tpl,
       fullPath: inputs.path
     };
-    
-    let options = {
-      name
-    }
+
     let res = loadLocalTpl(data.model, data.fullPath);
-    if(!res){
+    if (!res) {
       return;
     }
 
     isRewrite(data.fullPath, function() {
-      
       res.forEach((item: any) => {
         checkDirExist(path.dirname(item.path));
         var tpl = fs
