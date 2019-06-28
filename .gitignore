@@ -3,7 +3,12 @@
 node_modules/
 .DS_Store
 .history
+
+#config
 yoso/.yosoconfig
+
+#test
+test/testDir/
 
 # output
 lib/**/*.js

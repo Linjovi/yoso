@@ -1,11 +1,11 @@
-import { mkdirsSync, generateFileFromTpl, rename, readConfig } from "./utils";
+import { mkdirsSync, generateFileFromTpl, rename } from "./utils";
 import Request from "./request";
 import * as path from "path";
 import * as ProgressBar from "progress";
 import * as logSymbols from "log-symbols";
 import chalk from "chalk";
 import ora from "ora";
-import { isTemplateElement } from "@babel/types";
+import { promises } from "fs";
 let spinner: any = null; // loading animate
 let bar: any = null; // loading bar
 
@@ -16,7 +16,7 @@ let bar: any = null; // loading bar
  * @param {String} branch
  * @param {String} download
  */
-export function requestUrl(
+export async function requestUrl(
   username: string,
   repos: string,
   branch: string,
@@ -29,15 +29,16 @@ export function requestUrl(
   spinner.text = "loading...";
   const url = `https://api.github.com/repos/${username}/${repos}/git/trees/${branch}?recursive=1`;
 
-  Request({ url, method: "get" })
-    .then((res: any) => {
-      const data = res.data;
-      const trees = data.tree;
-      handleTree(username, repos, branch, trees, download, filePath);
-    })
-    .catch(() => {
-      spinner.stop();
-    });
+  try {
+    const res = await Request({ url, method: "get" });
+    const data = res.data;
+    const trees = data.tree;
+    await handleTree(username, repos, branch, trees, download, filePath);
+    return res;
+
+  } catch (err) {
+    spinner.stop();
+  }
 }
 
 /**
@@ -48,7 +49,7 @@ export function requestUrl(
  * @param {String} tree
  * @param {String} download
  */
-function handleTree(
+async function handleTree(
   username: string,
   repos: string,
   branch: string,
@@ -90,9 +91,10 @@ function handleTree(
   bar = new ProgressBar(":bar :current/:total", {
     total: filterList.length
   });
-  filterList.map(item => {
-    downloadFile(username, repos, branch, item.path, filePath);
-  });
+  await Promise.all(filterList.map(async (item) => {
+      await downloadFile(username, repos, branch, item.path, filePath);
+      return item
+  }));
 }
 
 /**
@@ -101,7 +103,7 @@ function handleTree(
  * @param {String} branch
  * @param {String} url
  */
-function downloadFile(
+export async function downloadFile(
   username: string,
   repos: string,
   branch: string,
@@ -113,27 +115,24 @@ function downloadFile(
   const dir = path.dirname(exportUrl);
   // mkdir
   mkdirsSync(dir);
+  // console.log(dir)
   //download
-  Request({
-    url: `https://github.com/${username}/${repos}/raw/${branch}/${url}`,
-    method: "get"
-  })
-    .then(res => {
-      generateFileFromTpl(
-        res.data,
-        { name: path.basename(filePath) },
-        exportUrl
-      );
-      bar.tick();
-      if (bar.complete) {
-        console.log(
-          logSymbols.success,
-          chalk.green(`${repos} all files download!`)
-        );
-      }
-    })
-    .catch(err => {
-      console.log(logSymbols.error, chalk.red(`${url} is error`));
-      return;
+  try {
+    const res = await Request({
+      url: `https://github.com/${username}/${repos}/raw/${branch}/${url}`,
+      method: "get"
     });
+    generateFileFromTpl(res.data, { name: path.basename(filePath) }, exportUrl);
+    bar.tick();
+    if (bar.complete) {
+      console.log(
+        logSymbols.success,
+        chalk.green(`${repos} all files download!`)
+      );
+    }
+    return res;
+  } catch (err) {
+    console.log(logSymbols.error, chalk.red(`${url} is error`));
+    return;
+  }
 }

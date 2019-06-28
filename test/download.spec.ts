@@ -1,10 +1,37 @@
-import {requestUrl} from "../utils/download"
+import { requestUrl } from "../utils/download";
+import { deleteall } from "../utils/utils";
+import * as fs from "fs";
 
 describe("utils/download 测试", () => {
-  // jest 自带断言库
-  it("download dir", () =>
+  
+  it("download file", async () => {
+    if (fs.existsSync("test/testDir/demo.js")) {
+      fs.unlinkSync("test/testDir/demo.js");
+    }
+    await requestUrl("linjovi", "tpl-repos", "master", "test.js", "test/testDir/demo");
+    let res = fs.existsSync("test/testDir/demo.js");
+    expect(res).toBe(true);
+  });
 
-  requestUrl("linjovi","tpl-repo","master","test.js", "demo"))
-    // expect().toBe(currentPath + "/demo/test.js"));
+  it("download dir", async () => {
+    if (fs.existsSync("test/testDir/demo")) {
+      deleteall("test/testDir/demo");
+    }
+    await requestUrl("linjovi", "tpl-repos", "master", "nej", "test/testDir/demo");
+    let res = fs.existsSync("test/testDir/demo/component.js");
+    expect(res).toBe(true);
+  });
+
+  it("download duplication dir", async () => {
+    if (fs.existsSync("test/testDir/test")) {
+      deleteall("test/testDir/test");
+    }
+    if (fs.existsSync("test/testDir/test.js")) {
+      deleteall("test/testDir/test.js");
+    }
+    await requestUrl("linjovi", "tpl-repos", "master", "test", "test/testDir/test");
+    let res = fs.existsSync("test/testDir/test/test1.js") && !fs.existsSync("test/testDir/test.js");
+    expect(res).toBe(true);
+  });
 
 });

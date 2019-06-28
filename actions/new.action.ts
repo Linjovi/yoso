@@ -19,17 +19,21 @@ var data: any;
 export class NewAction extends AbstractAction {
   public async handle(inputs: NewCmd) {
     var name = path.basename(inputs.path);
-    const gitInfo = getGitInfo()
+    const gitInfo = getGitInfo();
 
-    var options: {[k: string]: any} = {name}
+    var options: { [k: string]: any } = { name };
 
-    if(gitInfo.name){
-      options.author = gitInfo.name
+    if (gitInfo.name) {
+      options.author = gitInfo.name;
     }
-    if(gitInfo.email){
-      options.email = gitInfo.email
+    if (gitInfo.email) {
+      options.email = gitInfo.email;
     }
-    console.log(gitInfo);
+    console.log(options);
+
+    if (inputs.options.orthers) {
+    }
+
     data = {
       model: inputs.tpl,
       fullPath: inputs.path

@@ -4,7 +4,7 @@ import { Box } from 'ink';
 export const Welcome = ()=>{
     return (
         <Box>
-            Welcome to use tpl-stencli
+            Welcome to use YOSO
         </Box>
     )
 }

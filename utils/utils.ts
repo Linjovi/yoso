@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 import * as inquirer from "inquirer";
 import * as nunjucks from "nunjucks";
-import {yosoConfig} from "../actions/action.input";
+import { yosoConfig } from "../actions/action.input";
 
 var currentPath = process.cwd(); //当前目录
 
@@ -69,13 +69,30 @@ export function rename(url: string, filePath: string) {
   return path.join(currentPath, realPath);
 }
 
-export function readConfig():yosoConfig{
-  const configPath = `${path.dirname(__dirname)}/yoso/.yosoconfig`
-  if (!fs.existsSync(configPath)){
-    fs.writeFileSync(configPath, '{"username":"","repos":"","branch":"","token":""}');
+export function readConfig(): yosoConfig {
+  const configPath = `${path.dirname(__dirname)}/yoso/.yosoconfig`;
+  if (!fs.existsSync(configPath)) {
+    fs.writeFileSync(
+      configPath,
+      '{"username":"","repos":"","branch":"","token":""}'
+    );
   }
-  var config = JSON.parse(
-    fs.readFileSync(configPath).toString()
-  );
-  return config
+  var config = JSON.parse(fs.readFileSync(configPath).toString());
+  return config;
 }
+
+export function deleteall(path:string) {
+	var files = [];
+	if(fs.existsSync(path)) {
+		files = fs.readdirSync(path);
+		files.forEach(function(file, index) {
+			var curPath = path + "/" + file;
+			if(fs.statSync(curPath).isDirectory()) { // recurse
+				deleteall(curPath);
+			} else { // delete file
+				fs.unlinkSync(curPath);
+			}
+		});
+		fs.rmdirSync(path);
+	}
+};
