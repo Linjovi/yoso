@@ -71,7 +71,7 @@ $ yoso init vuex src/store/demo
   date,//当前日期
 }
 ```
-![](https://raw.githubusercontent.com/Linjovi/myPic/master/img/20190701181351.png?token=AEN2VVMGPUDSFQQYBAGLSGK5DHOR4)
+![](https://raw.githubusercontent.com/Linjovi/myPic/master/img/20190701181630.png?token=AEN2VVMRCOQKXTOIEKZD5RK5DHO3Y)
 
 输入格式为```key value```，用一个或多个空格分隔，首尾的空格默认会清除。可以使用同名自定义字段覆盖默认字段。
 

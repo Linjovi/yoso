@@ -71,6 +71,6 @@ You can use the command line option ```-o``` or ```--others``` to add custom fie
   email,//From the git config
 }
 ```
-![](https://raw.githubusercontent.com/Linjovi/myPic/master/img/20190701181351.png?token=AEN2VVMGPUDSFQQYBAGLSGK5DHOR4)
+![](https://raw.githubusercontent.com/Linjovi/myPic/master/img/20190701181630.png?token=AEN2VVMRCOQKXTOIEKZD5RK5DHO3Y)
 
 The input format is```key value```, separated by one or more Spaces, and the leading and trailing Spaces are cleared by default. You can override the default field with a custom field of the same name.
