@@ -30,6 +30,7 @@ $ yoso config
 #### 加载
 
 1. 从本地模板加载
+
 ```bash
 $ yoso new [options] <tpl> <path>
 ```
@@ -37,14 +38,28 @@ $ yoso new [options] <tpl> <path>
 ```bash
 $ yoso new vuex src/store/demo 
 ```
+可选参数
+```
+参数
+  -o, --others 添加自定义字段
+```
 
 2. 从github仓库加载
+
 ```bash
 $ yoso init [options] <tpl> [path]
 ```
 例如
 ```bash
 $ yoso init vuex src/store/demo
+```
+可选参数
+```
+参数
+  -b, --branch <branch> 设置分支
+  -u, --username <username> 设置用户名
+  -r, --reops <repos> 设置仓库名
+  -o, --others 添加自定义字段
 ```
 
 可以使用命令行参数```-o```或```--others```，添加自定义字段，插到模板中的对应位置。默认包含的字段有：
@@ -53,7 +68,9 @@ $ yoso init vuex src/store/demo
   name,//从输入的 path 中获得
   author,//从 git config 中获得
   email,//从 git config 中获得
+  date,//当前日期
 }
 ```
-可以使用同名自定义字段覆盖默认字段。
+![](https://raw.githubusercontent.com/Linjovi/myPic/master/img/20190701181351.png?token=AEN2VVMGPUDSFQQYBAGLSGK5DHOR4)
+输入格式为```key value```，用一个或多个空格分隔，首尾的空格默认会清除。可以使用同名自定义字段覆盖默认字段。
 
