@@ -5,7 +5,6 @@ import * as ProgressBar from "progress";
 import * as logSymbols from "log-symbols";
 import chalk from "chalk";
 import ora from "ora";
-import { promises } from "fs";
 let spinner: any = null; // loading animate
 let bar: any = null; // loading bar
 
@@ -21,7 +20,8 @@ export async function requestUrl(
   repos: string,
   branch: string,
   download: string,
-  filePath: string
+  filePath: string,
+  options: any
 ) {
   // request start
   spinner = ora("download start!").start();
@@ -33,9 +33,16 @@ export async function requestUrl(
     const res = await Request({ url, method: "get" });
     const data = res.data;
     const trees = data.tree;
-    await handleTree(username, repos, branch, trees, download, filePath);
+    await handleTree(
+      username,
+      repos,
+      branch,
+      trees,
+      download,
+      filePath,
+      options
+    );
     return res;
-
   } catch (err) {
     spinner.stop();
   }
@@ -55,7 +62,8 @@ async function handleTree(
   branch: string,
   trees: [any],
   download: string,
-  filePath: string
+  filePath: string,
+  options: any
 ) {
   let fileList = trees.filter(item => {
     return item.type === "blob";
@@ -91,10 +99,12 @@ async function handleTree(
   bar = new ProgressBar(":bar :current/:total", {
     total: filterList.length
   });
-  await Promise.all(filterList.map(async (item) => {
-      await downloadFile(username, repos, branch, item.path, filePath);
-      return item
-  }));
+  await Promise.all(
+    filterList.map(async item => {
+      await downloadFile(username, repos, branch, item.path, filePath, options);
+      return item;
+    })
+  );
 }
 
 /**
@@ -108,7 +118,8 @@ export async function downloadFile(
   repos: string,
   branch: string,
   url: string,
-  filePath: string
+  filePath: string,
+  options: any
 ) {
   // rename
   const exportUrl = rename(url, filePath);
@@ -122,7 +133,7 @@ export async function downloadFile(
       url: `https://github.com/${username}/${repos}/raw/${branch}/${url}`,
       method: "get"
     });
-    generateFileFromTpl(res.data, { name: path.basename(filePath) }, exportUrl);
+    generateFileFromTpl(res.data, options, exportUrl);
     bar.tick();
     if (bar.complete) {
       console.log(

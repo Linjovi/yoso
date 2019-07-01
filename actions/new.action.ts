@@ -7,9 +7,12 @@ import {
   checkDirExist,
   isRewrite,
   rename,
-  generateFileFromTpl
+  generateFileFromTpl,
+  formatDate
 } from "../utils/utils";
 import { directoryTree } from "../utils/fileTree";
+import { optionView } from "../ui/optionInput";
+import { literal } from "ts-essentials";
 
 var filePath = path.dirname(__dirname); //yoso根目录
 var currentPath = process.cwd(); //当前目录
@@ -21,7 +24,7 @@ export class NewAction extends AbstractAction {
     var name = path.basename(inputs.path);
     const gitInfo = getGitInfo();
 
-    var options: { [k: string]: any } = { name };
+    var options: { [k: string]: any } = { name ,date:formatDate(new Date()) };
 
     if (gitInfo.name) {
       options.author = gitInfo.name;
@@ -29,31 +32,42 @@ export class NewAction extends AbstractAction {
     if (gitInfo.email) {
       options.email = gitInfo.email;
     }
-    console.log(options);
-
-    if (inputs.options.orthers) {
-    }
 
     data = {
       model: inputs.tpl,
       fullPath: inputs.path
     };
 
-    let res = loadLocalTpl(data.model, data.fullPath);
-    if (!res) {
+    if (inputs.options.others) {
+      optionView(options, (list: any) => {
+        list.forEach((element:any) => {
+          options[element.key] = element.value
+        });
+        console.log(options);
+        newTpl(data, options);
+      });
       return;
     }
 
-    isRewrite(data.fullPath, function() {
-      res.forEach((item: any) => {
-        checkDirExist(path.dirname(item.path));
-        var tpl = fs
-          .readFileSync(path.join(filePath, "yoso", "tpl", item.url))
-          .toString();
-        generateFileFromTpl(tpl, options, item.path);
-      });
-    });
+    newTpl(data, options);
   }
+}
+
+function newTpl(data: any, options: any) {
+  let res = loadLocalTpl(data.model, data.fullPath);
+  if (!res) {
+    return;
+  }
+
+  isRewrite(data.fullPath, function() {
+    res.forEach((item: any) => {
+      checkDirExist(path.dirname(item.path));
+      var tpl = fs
+        .readFileSync(path.join(filePath, "yoso", "tpl", item.url))
+        .toString();
+      generateFileFromTpl(tpl, options, item.path);
+    });
+  });
 }
 
 function loadLocalTpl(tplPath: string, toPath: string) {

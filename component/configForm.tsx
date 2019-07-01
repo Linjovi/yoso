@@ -5,7 +5,7 @@ import TextInput from "./TextInput";
 import Error from "./Error";
 import * as fs from "fs";
 import * as path from "path";
-import {readConfig} from "../utils/utils"
+import { readConfig } from "../utils/utils";
 
 const filePath = path.dirname(__dirname); //yoso根目录
 var config = readConfig();
@@ -51,7 +51,7 @@ const fields = [
 export function ConfigForm() {
   const [activeField, setActiveField] = React.useState(0);
   const [submission, setSubmission] = React.useState(config);
-  const [finish,setFinish] = React.useState(false);
+  const [finish, setFinish] = React.useState(false);
   return finish ? (
     <AppContext.Consumer>
       {({ exit }) => {
@@ -63,7 +63,7 @@ export function ConfigForm() {
         return (
           <Box flexDirection="column" marginTop={1}>
             <Color blue>
-              <Text bold>Values submitted:</Text>
+              <Text bold>Config Values:</Text>
             </Color>
             <Box>{JSON.stringify(submission, undefined, 2)}</Box>
           </Box>
@@ -74,39 +74,37 @@ export function ConfigForm() {
     <Form onSubmit={setSubmission} initialValues={config}>
       {({ handleSubmit, validating }) => (
         <Box flexDirection="column">
-          {fields.map(
-            ({ name, label, validate, Input }, index) => (
-              <Field name={name} key={name} validate={validate}>
-                {({ input, meta }) => (
-                  <Box flexDirection="column">
-                    <Box>
-                      <Text bold={activeField === index}>{label}: </Text>
-                      {activeField === index ? (
-                        <Input
-                          {...input}
-                          onSubmit={() => {
-                            if (meta.valid && !validating) {
-                              setActiveField(value => value + 1); // go to next field
-                              if (activeField === fields.length - 1) {
-                                // last field, so submit
-                                handleSubmit();
-                                setFinish(true)
-                              }
-                            } else {
-                              input.onBlur(); // mark as touched to show error
+          {fields.map(({ name, label, validate, Input }, index) => (
+            <Field name={name} key={name} validate={validate}>
+              {({ input, meta }) => (
+                <Box flexDirection="column">
+                  <Box>
+                    <Text bold={activeField === index}>{label}: </Text>
+                    {activeField === index ? (
+                      <Input
+                        {...input}
+                        onSubmit={() => {
+                          if (meta.valid && !validating) {
+                            setActiveField(value => value + 1); // go to next field
+                            if (activeField === fields.length - 1) {
+                              // last field, so submit
+                              handleSubmit();
+                              setFinish(true);
                             }
-                          }}
-                        />
-                      ) : (
-                        (input.value && <Text>{input.value}</Text>)
-                      )}
-                    </Box>
-                    {meta.error && meta.touched && <Error>{meta.error}</Error>}
+                          } else {
+                            input.onBlur(); // mark as touched to show error
+                          }
+                        }}
+                      />
+                    ) : (
+                      input.value && <Text>{input.value}</Text>
+                    )}
                   </Box>
-                )}
-              </Field>
-            )
-          )}
+                  {meta.error && meta.touched && <Error>{meta.error}</Error>}
+                </Box>
+              )}
+            </Field>
+          ))}
         </Box>
       )}
     </Form>
