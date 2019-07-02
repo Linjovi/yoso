@@ -1,7 +1,7 @@
 
 export interface yosoConfig {
   username: string;
-  repos: string;
+  repo: string;
   branch: string;
   token?: string;
 }

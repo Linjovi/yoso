@@ -11,13 +11,13 @@ let bar: any = null; // loading bar
 /**
  * @desc request api get file tree
  * @param {String} username
- * @param {String} repos
+ * @param {String} repo
  * @param {String} branch
  * @param {String} download
  */
 export async function requestUrl(
   username: string,
-  repos: string,
+  repo: string,
   branch: string,
   download: string,
   filePath: string,
@@ -27,7 +27,7 @@ export async function requestUrl(
   spinner = ora("download start!").start();
   spinner.color = "yellow";
   spinner.text = "loading...";
-  const url = `https://api.github.com/repos/${username}/${repos}/git/trees/${branch}?recursive=1`;
+  const url = `https://api.github.com/repos/${username}/${repo}/git/trees/${branch}?recursive=1`;
 
   try {
     const res = await Request({ url, method: "get" });
@@ -35,7 +35,7 @@ export async function requestUrl(
     const trees = data.tree;
     await handleTree(
       username,
-      repos,
+      repo,
       branch,
       trees,
       download,
@@ -51,14 +51,14 @@ export async function requestUrl(
 /**
  * parse response fliter
  * @param {String} username
- * @param {String} repos
+ * @param {String} repo
  * @param {String} branch
  * @param {String} tree
  * @param {String} download
  */
 async function handleTree(
   username: string,
-  repos: string,
+  repo: string,
   branch: string,
   trees: [any],
   download: string,
@@ -101,7 +101,7 @@ async function handleTree(
   });
   await Promise.all(
     filterList.map(async item => {
-      await downloadFile(username, repos, branch, item.path, filePath, options);
+      await downloadFile(username, repo, branch, item.path, filePath, options);
       return item;
     })
   );
@@ -109,13 +109,13 @@ async function handleTree(
 
 /**
  * @param {String} username
- * @param {String} repos
+ * @param {String} repo
  * @param {String} branch
  * @param {String} url
  */
 export async function downloadFile(
   username: string,
-  repos: string,
+  repo: string,
   branch: string,
   url: string,
   filePath: string,
@@ -130,7 +130,7 @@ export async function downloadFile(
   //download
   try {
     const res = await Request({
-      url: `https://github.com/${username}/${repos}/raw/${branch}/${url}`,
+      url: `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${url}`,
       method: "get"
     });
     generateFileFromTpl(res.data, options, exportUrl);
@@ -138,7 +138,7 @@ export async function downloadFile(
     if (bar.complete) {
       console.log(
         logSymbols.success,
-        chalk.green(`${repos} all files download!`)
+        chalk.green(`${repo} all files download!`)
       );
     }
     return res;

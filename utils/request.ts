@@ -42,7 +42,7 @@ instance.interceptors.response.use(
       case 404:
         console.log(
           chalk.red(
-            `Not found! Check that your username, repos and branch are correct!`
+            `Not found! Check that your username, repo and branch are correct!`
           )
         );
         break;

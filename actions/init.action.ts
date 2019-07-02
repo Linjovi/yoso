@@ -24,7 +24,7 @@ function initTpl(inputs: NewCmd) {
 
   var data = {
     username: inputs.options.username || config.username,
-    repos: inputs.options.repos || config.repos,
+    repo: inputs.options.repo || config.repo,
     branch: inputs.options.branch || config.branch || "master",
     download: inputs.tpl,
     path: inputs.path || inputs.tpl
@@ -48,10 +48,10 @@ function initTpl(inputs: NewCmd) {
         options[element.key] = element.value;
       });
       console.log(options);
-      requestUrl(data.username, data.repos, data.branch, data.download, data.path,options);
+      requestUrl(data.username, data.repo, data.branch, data.download, data.path,options);
     });
     return;
   }
 
-  requestUrl(data.username, data.repos, data.branch, data.download, data.path,options);
+  requestUrl(data.username, data.repo, data.branch, data.download, data.path,options);
 }

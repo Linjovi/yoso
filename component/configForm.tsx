@@ -21,8 +21,8 @@ const fields = [
     Input: TextInput
   },
   {
-    name: "repos",
-    label: "config your github repos name",
+    name: "repo",
+    label: "config your github repo name",
     validate: (value: any) => {
       if (!value) {
         return "Required";

@@ -58,7 +58,7 @@ $ yoso init vuex src/store/demo
 参数
   -b, --branch <branch> 设置分支
   -u, --username <username> 设置用户名
-  -r, --reops <repos> 设置仓库名
+  -r, --repo <repo> 设置仓库名
   -o, --others 添加自定义字段
 ```
 

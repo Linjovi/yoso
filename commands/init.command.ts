@@ -10,11 +10,11 @@ export class InitCommand extends AbstractCommand {
       .description("Init Files From Git, example: tpl init demo src")
       .option("-b, --branch <branch>", "choose branch")
       .option("-u, --username <username>", "choose username")
-      .option("-r, --repos <repos>", "choose repos")
+      .option("-r, --repo <repo>", "choose repo")
       .option("-o, --others","add other options")
       .action(async (tpl: string, path: string, command: Command) => {
-        let {branch,username,repos} = command;
-        let options = {branch,username,repos,others:!!command.others}
+        let {branch,username,repo} = command;
+        let options = {branch,username,repo,others:!!command.others}
         let inputs: NewCmd = { path, tpl, options: options };
         await this.action.handle(inputs);
       });

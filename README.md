@@ -59,7 +59,7 @@ Optional argments
 Options
   -b, --branch <branch> edit branch
   -u, --username <username> edit username
-  -r, --reops <repos> edit repos
+  -r, --repo <repo> edit repo
   -o, --others Add custom fields
 ```
 

@@ -74,7 +74,7 @@ export function readConfig(): yosoConfig {
   if (!fs.existsSync(configPath)) {
     fs.writeFileSync(
       configPath,
-      '{"username":"","repos":"","branch":"","token":""}'
+      '{"username":"","repo":"","branch":"","token":""}'
     );
   }
   var config = JSON.parse(fs.readFileSync(configPath).toString());
