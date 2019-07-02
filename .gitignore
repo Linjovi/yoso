@@ -25,3 +25,4 @@ bin/**/*.d.ts
 utils/**/*.d.ts
 component/**/*.d.ts
 ui/**/*.d.ts
+**/*.map

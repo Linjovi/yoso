@@ -34,8 +34,22 @@ export function getGitInfo() {
   let globalInfo = globalPath
     ? ini.parse(fs.readFileSync(globalPath).toString())
     : {};
+  let name:string='';
+  let email:string='';
+  if(globalInfo.user && globalInfo.user.name){
+    name = globalInfo.user.name
+  }
+  if(proInfo.user && proInfo.user.name){
+    name = proInfo.user.name
+  }
+  if(globalInfo.user && globalInfo.user.email){
+    email = globalInfo.user.email
+  }
+  if(proInfo.user && proInfo.user.email){
+    email = proInfo.user.email
+  }
   return {
-    name: proInfo.user.name || globalInfo.user.name,
-    email: proInfo.user.email || globalInfo.user.email
+    name:name,
+    email:email
   };
 }
