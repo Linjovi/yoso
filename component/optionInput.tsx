@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AppContext, Box } from "ink";
+import { AppContext, Box, Text, Color } from "ink";
 import TextInput from "ink-text-input";
 import Table from "ink-table";
 import { callbackify } from "util";
@@ -29,7 +29,7 @@ export const OptionInput = (props: any) => {
           return item.key === key;
         });
         if (index >= 0) {
-          list.splice(index, 1, { key, value })
+          list.splice(index, 1, { key, value });
           setList(list);
         } else {
           setList(list.concat({ key, value }));
@@ -58,6 +58,15 @@ export const OptionInput = (props: any) => {
   ) : (
     <Box flexDirection="column">
       <Table data={list} />
+      <Box>
+        <Text bold>Please use Enter key to save</Text>
+      </Box>
+      <Box>
+        <Text bold>
+          The input format is:
+          <Color red>key value</Color>
+        </Text>
+      </Box>
       <Box>
         <TextInput value={value} onChange={setValue} onSubmit={handleSubmit} />
       </Box>
