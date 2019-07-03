@@ -1,6 +1,6 @@
 {
   "name": "yoso",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "",
   "bin": {
     "yoso": "bin/yoso.js"
@@ -9,7 +9,8 @@
     "build": "tsc",
     "start:cli": "ts-node bin/yoso.ts",
     "test": "jest --config test/jest-config.json",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "build:clear":"find ./actions ./bin ./commands ./utils ./ui ./component -type f -name '*.d.ts' -delete & find ./actions ./bin ./commands ./utils ./ui ./component -type f -not -name '*.ts*' -delete"
   },
   "repository": {
     "type": "git",
