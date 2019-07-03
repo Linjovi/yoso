@@ -2,7 +2,6 @@ import * as path from "path";
 import * as fs from "fs";
 import * as inquirer from "inquirer";
 import * as nunjucks from "nunjucks";
-import { yosoConfig } from "../actions/action.input";
 
 var currentPath = process.cwd(); //当前目录
 
@@ -67,18 +66,6 @@ export function rename(url: string, filePath: string) {
   pathList[0] = name;
   let realPath = pathList.join("/");
   return path.join(currentPath, realPath);
-}
-
-export function readConfig(): yosoConfig {
-  const configPath = `${path.dirname(__dirname)}/yoso/.yosoconfig`;
-  if (!fs.existsSync(configPath)) {
-    fs.writeFileSync(
-      configPath,
-      '{"username":"","repo":"","branch":"","token":""}'
-    );
-  }
-  var config = JSON.parse(fs.readFileSync(configPath).toString());
-  return config;
 }
 
 export function deleteall(path:string) {

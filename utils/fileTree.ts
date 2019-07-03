@@ -3,6 +3,8 @@
 import * as FS from "fs";
 import * as PATH from "path";
 
+const yosoPath = `${process.env.HOME}/.yoso`
+
 function safeReadDirSync(path: string) {
   let dirData = {};
   try {
@@ -33,7 +35,7 @@ export function directoryTree(path: string, res: any) {
   if (stats.isFile()) {
     // Skip if it does not match the extension regex
     var filePath = PATH.dirname(__dirname); //yoso根目录
-    res.add({ url: PATH.relative(PATH.join(filePath, "yoso", "tpl"), path) });
+    res.add({ url: PATH.relative(PATH.join(yosoPath, "tpl"), path) });
   } else if (stats.isDirectory()) {
     let dirData: any = safeReadDirSync(path);
     if (dirData === null) return null;

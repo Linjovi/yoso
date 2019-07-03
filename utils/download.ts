@@ -86,6 +86,16 @@ async function handleTree(
         return item.path.split(".")[0] === download;
       });
     }
+    if(filterList.length === 0){
+      filterList = fileList.filter(item => {
+        return item.path.split("/")[0].includes(download);
+      });
+    }
+    if(filterList.length === 0){
+      filterList = fileList.filter(item => {
+        return item.path.split(".")[0].includes(download);
+      });
+    }
   }
 
   spinner.stop();

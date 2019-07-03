@@ -5,9 +5,10 @@ import TextInput from "./TextInput";
 import Error from "./Error";
 import * as fs from "fs";
 import * as path from "path";
-import { readConfig } from "../utils/utils";
+import { readConfig } from "../utils/info";
 
 const filePath = path.dirname(__dirname); //yoso根目录
+const yosoPath = `${process.env.HOME}/.yoso`
 var config = readConfig();
 const fields = [
   {
@@ -57,7 +58,7 @@ export function ConfigForm() {
       {({ exit }) => {
         setTimeout(exit);
         fs.writeFileSync(
-          `${filePath}/yoso/.yosoconfig`,
+          path.join(yosoPath,'.yosoconfig'),
           JSON.stringify(submission)
         );
         return (

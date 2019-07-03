@@ -1,9 +1,6 @@
 .idea/
 .gitignore
 
-#config
-yoso/.yosoconfig
-
 #test
 test/testDir/
 

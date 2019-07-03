@@ -1,5 +1,5 @@
 import axios from "axios";
-import { readConfig } from "./utils";
+import { readConfig } from "./info";
 import chalk from "chalk";
 
 const instance = axios.create({

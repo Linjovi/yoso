@@ -5,8 +5,8 @@ import * as nunjucks from "nunjucks";
 import * as path from "path";
 import { requestUrl } from "../utils/download";
 import * as inquirer from "inquirer";
-import { isRewrite, readConfig, formatDate } from "../utils/utils";
-import { getGitInfo } from "../utils/info";
+import { isRewrite, formatDate } from "../utils/utils";
+import { getGitInfo,readConfig } from "../utils/info";
 import { optionView } from "../ui/optionInput";
 
 var filePath = path.dirname(__dirname); //yoso根目录

@@ -12,10 +12,11 @@ import {
 } from "../utils/utils";
 import { directoryTree } from "../utils/fileTree";
 import { optionView } from "../ui/optionInput";
-import { literal } from "ts-essentials";
+
 
 var filePath = path.dirname(__dirname); //yoso根目录
 var currentPath = process.cwd(); //当前目录
+const yosoPath = `${process.env.HOME}/.yoso`
 
 var data: any;
 
@@ -63,7 +64,7 @@ function newTpl(data: any, options: any) {
     res.forEach((item: any) => {
       checkDirExist(path.dirname(item.path));
       var tpl = fs
-        .readFileSync(path.join(filePath, "yoso", "tpl", item.url))
+        .readFileSync(path.join(yosoPath, "tpl", item.url))
         .toString();
       generateFileFromTpl(tpl, options, item.path);
     });
@@ -73,10 +74,10 @@ function newTpl(data: any, options: any) {
 function loadLocalTpl(tplPath: string, toPath: string) {
   let res: any = new Set();
   var Finder = require("fs-finder");
-  let fileExists = Finder.in(path.join(filePath, "yoso", "tpl")).findFiles(
+  let fileExists = Finder.in(path.join(yosoPath, "tpl")).findFiles(
     tplPath
   ).length;
-  let dirExists = fs.existsSync(path.join(filePath, "yoso", "tpl", tplPath));
+  let dirExists = fs.existsSync(path.join(yosoPath, "tpl", tplPath));
 
   if (fileExists + dirExists > 1) {
     console.log("more than one");
@@ -88,19 +89,20 @@ function loadLocalTpl(tplPath: string, toPath: string) {
     if (dirExists) {
       //文件夹
 
-      directoryTree(path.join(filePath, "yoso", "tpl", tplPath), res);
+      directoryTree(path.join(yosoPath, "tpl", tplPath), res);
     } else {
       //文件
-      var item = Finder.in(path.join(filePath, "yoso", "tpl")).findFiles(
+      var item = Finder.in(path.join(yosoPath, "tpl")).findFiles(
         tplPath
       )[0];
-      var url = path.relative(path.join(filePath, "yoso", "tpl"), item);
+      var url = path.relative(path.join(yosoPath, "tpl"), item);
       res = [{ url }];
     }
 
     res.forEach((element: any) => {
       element.path = rename(element.url, toPath);
     });
+    // console.log(res)
   }
   return res;
 }
