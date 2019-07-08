@@ -30,7 +30,7 @@ function initTpl(inputs: NewCmd) {
     path: inputs.path || inputs.tpl
   };
 
-  var name = path.basename(inputs.path);
+  var name = path.basename(data.path);
   const gitInfo = getGitInfo();
 
   var options: { [k: string]: any } = { name, date: formatDate(new Date()) };
