@@ -8,7 +8,7 @@ describe("utils/download 测试", () => {
     if (fs.existsSync("test/testDir/demo.js")) {
       fs.unlinkSync("test/testDir/demo.js");
     }
-    await requestUrl("linjovi", "tpl-repos", "master", "test.js", "test/testDir/demo");
+    await requestUrl("linjovi", "tpl-repos", "master", "test.js", "test/testDir/demo",null);
     let res = fs.existsSync("test/testDir/demo.js");
     expect(res).toBe(true);
   });
@@ -17,8 +17,8 @@ describe("utils/download 测试", () => {
     if (fs.existsSync("test/testDir/demo")) {
       deleteall("test/testDir/demo");
     }
-    await requestUrl("linjovi", "tpl-repos", "master", "nej", "test/testDir/demo");
-    let res = fs.existsSync("test/testDir/demo/component.js");
+    await requestUrl("linjovi", "tpl-repos", "master", "nej", "test/testDir/demo",null);
+    let res = fs.existsSync("test/testDir/demo/component.html");
     expect(res).toBe(true);
   });
 
@@ -29,7 +29,7 @@ describe("utils/download 测试", () => {
     if (fs.existsSync("test/testDir/test.js")) {
       deleteall("test/testDir/test.js");
     }
-    await requestUrl("linjovi", "tpl-repos", "master", "test", "test/testDir/test");
+    await requestUrl("linjovi", "tpl-repos", "master", "test", "test/testDir/test",null);
     let res = fs.existsSync("test/testDir/test/test1.js") && !fs.existsSync("test/testDir/test.js");
     expect(res).toBe(true);
   });

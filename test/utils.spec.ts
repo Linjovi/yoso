@@ -1,4 +1,4 @@
-import { rename, generateFileFromTpl,readConfig } from "../utils/utils";
+import { rename} from "../utils/utils";
 var currentPath = process.cwd();
 
 describe("utils/rename 测试", () => {
@@ -10,9 +10,3 @@ describe("utils/rename 测试", () => {
     expect(rename("test.js", "demo")).toBe(currentPath + "/demo.js"));
 });
 
-describe("utils/readConfig 测试", () => {
-
-  it("readConfig", () =>
-    expect(rename("nej/test.js", "demo")).toBe(currentPath + "/demo/test.js"));
-
-});

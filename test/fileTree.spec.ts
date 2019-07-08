@@ -7,8 +7,8 @@ describe("fileTree 测试", () => {
     directoryTree(filePath + "/test/test_data", res);
     expect(res).toEqual(
       new Set([
-        { url: "../../test/test_data/dir1/test.js" },
-        { url: "../../test/test_data/test.js" }
+        { url: "../../opensource/yoso/test/test_data/dir1/test.js" },
+        { url: "../../opensource/yoso/test/test_data/test.js" }
       ])
     );
   });
