@@ -46,8 +46,15 @@ $ yoso new vuex src/store/demo
 
 2. 从github仓库加载
 
+可以简单的通过`yoso init`唤起GUI操作界面，此时的配置是读取`yoso config`中的设置参数：
+
+<img src="https://raw.githubusercontent.com/brizer/graph-bed/master/img/Jul-09-2019%2010-41-40.gif"/>
+
+
+也可以指定参数来定制化操作:
+
 ```bash
-$ yoso init [options] <tpl> [path]
+$ yoso init [options] [tpl] [path]
 ```
 例如
 ```bash
