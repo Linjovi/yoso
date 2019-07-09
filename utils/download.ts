@@ -157,3 +157,34 @@ export async function downloadFile(
     return;
   }
 }
+
+interface githubTree {
+  path: string,
+  mode: number,
+  type: string,
+  sha: string,
+  size?: number,
+  url: string
+}
+/**
+ * @desc request api get git repo contents
+ * @param {String} username
+ * @param {String} repo
+ * @param {String} branch
+ */
+export async function getRepoContent(
+  username: string,
+  repo: string,
+  branch: string
+):Promise<any> {
+  const url = `https://api.github.com/repos/${username}/${repo}/git/trees/${branch}`;
+
+  try {
+    const res = await Request({ url, method: "get" });
+    const data = res.data;
+    const trees = data.tree;
+    return trees;
+  } catch (err) {
+    console.log(err)
+  }
+}
