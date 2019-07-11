@@ -185,6 +185,6 @@ export async function getRepoContent(
     const trees = data.tree;
     return trees;
   } catch (err) {
-    console.log(err)
+    // console.log(err)
   }
 }

@@ -7,7 +7,7 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(
-  config => {
+  (config:any) => {
     // do something before request is sent
     let yosoConfig = readConfig();
     if (yosoConfig.token) {
@@ -15,17 +15,23 @@ instance.interceptors.request.use(
     }
     return config;
   },
-  error => {
+  (error:any) => {
     // do something with request error
     return Promise.reject(error);
   }
 );
 
 instance.interceptors.response.use(
-  response => {
+  (response:any) => {
     return response;
   },
-  error => {
+  (error:any) => {
+    if(!error.response || !error.response.status){
+      console.log(
+        chalk.red(`Network Error!`)
+      );
+      return Promise.reject(error);
+    }
     switch (error.response.status) {
       case 401:
         console.log(

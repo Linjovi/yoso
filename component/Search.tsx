@@ -30,7 +30,7 @@ export const Search = (props: SearchProps) => {
   const [lists, setList] = React.useState<RepoItem[]>([]);
   const [cursor, setCursor] = React.useState<number>(-1);
   const [allLists, setAllList] = React.useState<RepoItem[]>([]);
-
+  const [error, setError] = React.useState(false);
   const { stdin } = props;
   /**
    * Get all repo content lists
@@ -41,8 +41,12 @@ export const Search = (props: SearchProps) => {
       props.repo,
       props.branch
     );
-    setAllList(content);
-    setList(content);
+    if (content) {
+      setAllList(content);
+      setList(content);
+    } else {
+      setError(true);
+    }
   };
   /**
    * Set cursor and current input's tpl value
@@ -141,7 +145,18 @@ export const Search = (props: SearchProps) => {
     }
   };
 
-  return (
+  return error ? (
+    <AppContext.Consumer>
+      {({ exit }) => {
+        setTimeout(exit);
+        return (
+          <Box>
+            <Color red>Network Error!</Color>
+          </Box>
+        );
+      }}
+    </AppContext.Consumer>
+  ) : (
     <Box flexDirection="column">
       <Box flexDirection="row">
         <Box marginRight={3}>
