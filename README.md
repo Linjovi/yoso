@@ -47,6 +47,13 @@ Options
 ```
 
 2. Load the template from the github repository
+
+The GUI operation interface can be easily evoked by `yoso init`. The configuration at this time is to read the setting parameters in `yoso config`:
+
+<img src="https://raw.githubusercontent.com/brizer/graph-bed/master/img/Jul-09-2019%2010-41-40.gif"/>
+
+You can also specify parameters to customize the operation：
+
 ```bash
 $ yoso init [options] <tpl> [path]
 ```
