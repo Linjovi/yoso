@@ -4,28 +4,26 @@ import TextInput from "ink-text-input";
 import { getRepoContent } from "../utils/download";
 
 interface SearchProps {
-  stdin: NodeJS.ReadStream,
-  username: string,
-  repo: string,
-  branch: string,
-  getTpl: ((value: string) => void) | undefined,
+  stdin: NodeJS.ReadStream;
+  username: string;
+  repo: string;
+  branch: string;
+  getTpl: ((value: string) => void) | undefined;
 }
 interface RepoItem {
-  path: string,
-  isSelect?: boolean
+  path: string;
+  isSelect?: boolean;
 }
 interface PathProps {
-  stdin: NodeJS.ReadStream,
-  username: string,
-  repo: string,
-  branch: string,
-  getPath: ((value: string) => void) | undefined
+  stdin: NodeJS.ReadStream;
+  username: string;
+  repo: string;
+  branch: string;
+  getPath: ((value: string) => void) | undefined;
 }
 
 const ARROW_UP = "\u001B[A";
 const ARROW_DOWN = "\u001B[B";
-
-
 
 export const Search = (props: SearchProps) => {
   const [value, setValue] = React.useState<string>("");
@@ -37,7 +35,7 @@ export const Search = (props: SearchProps) => {
   /**
    * Get all repo content lists
    */
-  const fetchData = async ():Promise<void> => {
+  const fetchData = async (): Promise<void> => {
     const content = await getRepoContent(
       props.username,
       props.repo,
@@ -48,9 +46,9 @@ export const Search = (props: SearchProps) => {
   };
   /**
    * Set cursor and current input's tpl value
-   * @param cursor 
+   * @param cursor
    */
-  const setCusrorAndValue = (cursor: number):void => {
+  const setCusrorAndValue = (cursor: number): void => {
     setCursor(cursor);
     setSelect(cursor);
     if (lists.length < 1) {
@@ -60,11 +58,11 @@ export const Search = (props: SearchProps) => {
   };
   /**
    * Handle input, for judge up and down select
-   * @param data 
+   * @param data
    */
   const handleStdio = (data: NodeJS.ReadStream) => {
-    const char:string = String(data);
-    let nextCursor:number;
+    const char: string = String(data);
+    let nextCursor: number;
     switch (char) {
       case ARROW_UP:
         if (cursor - 1 >= 0) {
@@ -130,7 +128,7 @@ export const Search = (props: SearchProps) => {
     }
     setList(nextList);
   }
-  
+
   const Item = (props: any) => {
     if (props.isSelect) {
       return (
@@ -180,7 +178,7 @@ export const Search = (props: SearchProps) => {
 };
 /**
  * Path selector
- * @param props 
+ * @param props
  */
 export const Path = (props: PathProps) => {
   const [value, setValue] = React.useState("");
@@ -204,7 +202,7 @@ export const Path = (props: PathProps) => {
 };
 /**
  * Contanier component, for step by step.
- * @param props 
+ * @param props
  */
 export const SearchWithStdin = (props: any) => {
   const [finish, setFinish] = React.useState(false);
@@ -212,18 +210,18 @@ export const SearchWithStdin = (props: any) => {
   const [tpl, setTpl] = React.useState("");
   let options: any = {};
 
-  function getTpl(value: string):void {
+  function getTpl(value: string): void {
     setStep(step + 1);
     setTpl(value);
   }
 
-  function getPath(value: string):void {
+  function getPath(value: string): void {
     options.tpl = tpl;
     options.path = value;
     props.onSubmit(options);
   }
 
-  const Panel: any = (props: any)=> {
+  const Panel: any = (props: any) => {
     if (step == 1) {
       return (
         <StdinContext.Consumer>
@@ -231,7 +229,14 @@ export const SearchWithStdin = (props: any) => {
         </StdinContext.Consumer>
       );
     } else if (step == 2) {
-      return <Path {...props} getPath={getPath} />;
+      return (
+        <Box flexDirection="column">
+          <Box flexDirection="row">You choose template: {tpl}</Box>
+          <Box flexDirection="row">
+            <Path {...props} getPath={getPath} />
+          </Box>
+        </Box>
+      );
     }
   };
 
