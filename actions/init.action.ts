@@ -58,7 +58,7 @@ function showInitUI(data: initData) {
     ...data,
     onSubmit: (value: initUIValue) => {
       data.download = value.tpl;
-
+      data.path = value.path;
       initTpl(data, true);
     }
   });

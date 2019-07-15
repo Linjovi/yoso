@@ -12,7 +12,7 @@
     "prepublish": "npm run build",
     "postpublish": "npm run build:clear",
     "build:clear": "find ./actions ./bin ./commands ./utils ./ui ./component -type f -name '*.d.ts' -delete & find ./actions ./bin ./commands ./utils ./ui ./component -type f -not -name '*.ts*' -delete",
-    "commit": "git-cz",
+    "commit": "git-cz .",
     "release": "standard-version"
   },
   "config": {
