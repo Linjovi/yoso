@@ -13,7 +13,7 @@ $ npm install -g yoso
 
 #### First use
 
-Write your own template file before using it for the first time. Here is the template engine used is handlebars, related syntax reference [handlebars official website](http://handlebarsjs.com/).You can put multiple template files in a folder with a certain file structure, or you can put a single file. Use the suffix you want for the template file.
+Write your own template file before using it for the first time. Here is the template engine used is nunjucks, related syntax reference [nunjucks official website](https://nunjucks.bootcss.com/).You can put multiple template files in a folder with a certain file structure, or you can put a single file. Use the suffix you want for the template file.
 For Example
 ```
 component

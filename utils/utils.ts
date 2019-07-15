@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
 import * as inquirer from "inquirer";
-import * as handlebars from "handlebars";
+import * as nunjucks from "nunjucks";
 
 var currentPath = process.cwd(); //当前目录
 
@@ -54,8 +54,7 @@ export async function isRewrite(path: string, callback: Function) {
 }
 
 export function generateFileFromTpl(tpl: string, data: any, exportUrl: string) {
-  var template = handlebars.compile(tpl);
-  var compiledData = template(data);
+  var compiledData = nunjucks.renderString(tpl, data);
   fs.writeFileSync(exportUrl, compiledData);
 }
 

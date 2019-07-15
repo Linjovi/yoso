@@ -153,6 +153,7 @@ export async function downloadFile(
     }
     return res;
   } catch (err) {
+    console.log(err)
     console.log(logSymbols.error, chalk.red(`${url} is error`));
     return;
   }

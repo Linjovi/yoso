@@ -10,7 +10,7 @@ $ npm install -g yoso
 
 #### 前置
 
-首先编写你自己的模板文件。这里是用的模板引擎是handlebars，相关语法参考[handlebars官网](http://handlebarsjs.com/)。你可以将多个模板文件按照一定的文件结构放在一个文件夹中，也可以放置一个单独的文件。模板文件的后缀名直接用你希望的后缀名。
+首先编写你自己的模板文件。这里是用的模板引擎是nunjucks，相关语法参考[nunjucks官网](https://nunjucks.bootcss.com/)。你可以将多个模板文件按照一定的文件结构放在一个文件夹中，也可以放置一个单独的文件。模板文件的后缀名直接用你希望的后缀名。
 例如
 ```
 component
