@@ -1,10 +1,7 @@
 import { NewCmd } from "../commands";
 import { AbstractAction } from "./abstract.action";
-import * as fs from "fs";
-import * as nunjucks from "nunjucks";
 import * as path from "path";
 import { requestUrl } from "../utils/download";
-import * as inquirer from "inquirer";
 import { isRewrite, formatDate } from "../utils/utils";
 import { getGitInfo, readConfig } from "../utils/info";
 import { optionView } from "../ui/optionInput";
