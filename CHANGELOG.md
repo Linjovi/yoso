@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3](https://github.com/Linjovi/yoso/compare/v1.1.2...v1.1.3) (2019-07-15)
+
+
+### Bug Fixes
+
+* **init.action.ts:** fix the bug when init without path ([3c8cd66](https://github.com/Linjovi/yoso/commit/3c8cd66)), closes [#9](https://github.com/Linjovi/yoso/issues/9)
+
+
+
 ### [1.1.2](https://github.com/Linjovi/yoso/compare/v1.1.1...v1.1.2) (2019-07-15)
 
 
