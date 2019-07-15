@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/Linjovi/yoso/compare/v1.1.3...v1.1.4) (2019-07-15)
+
+
+### Bug Fixes
+
+* fix init name bug ([0251883](https://github.com/Linjovi/yoso/commit/0251883))
+
+
+
 ### [1.1.3](https://github.com/Linjovi/yoso/compare/v1.1.2...v1.1.3) (2019-07-15)
 
 
