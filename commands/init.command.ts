@@ -1,6 +1,6 @@
 import { Command, CommanderStatic } from "commander";
 import { AbstractCommand } from "./abstract.command";
-import { NewCmd } from "./command.input";
+import { InitCmd } from "./command.input";
 
 export class InitCommand extends AbstractCommand {
   public load(program: CommanderStatic) {
@@ -15,7 +15,7 @@ export class InitCommand extends AbstractCommand {
       .action(async (tpl: string, path: string, command: Command) => {
         let {branch,username,repo} = command;
         let options = {branch,username,repo,others:!!command.others}
-        let inputs: NewCmd = { path, tpl, options: options };
+        let inputs: InitCmd = { path, tpl, options: options };
         await this.action.handle(inputs);
       });
   }

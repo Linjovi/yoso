@@ -3,10 +3,14 @@
 import * as FS from "fs";
 import * as PATH from "path";
 
-const yosoPath = `${process.env.HOME}/.yoso`
+const yosoPath = `${process.env.HOME}/.yoso`;
 
-function safeReadDirSync(path: string) {
-  let dirData = {};
+/**
+ * 返回路径下的所有文件
+ * @returns {string[]|null}
+ */
+function safeReadDirSync(path: string): string[] | null {
+  let dirData = [];
   try {
     dirData = FS.readdirSync(path);
   } catch (ex) {
@@ -24,8 +28,9 @@ function safeReadDirSync(path: string) {
  * @return {Object}
  */
 export function directoryTree(path: string, res: any) {
-  const item: any = { path };
+  const item: { path: string; url?: string } = { path };
   let stats;
+  
   try {
     stats = FS.statSync(path);
   } catch (e) {
@@ -34,15 +39,16 @@ export function directoryTree(path: string, res: any) {
 
   if (stats.isFile()) {
     // Skip if it does not match the extension regex
-    var filePath = PATH.dirname(__dirname); //yoso根目录
     res.add({ url: PATH.relative(PATH.join(yosoPath, "tpl"), path) });
-  } else if (stats.isDirectory()) {
-    let dirData: any = safeReadDirSync(path);
-    if (dirData === null) return null;
 
+  } else if (stats.isDirectory()) {
+
+    let dirData: string[] | null = safeReadDirSync(path);
+    if (dirData === null) return null;
     dirData
-      .map((child: any) => directoryTree(PATH.join(path, child), res))
+      .map((child: string) => directoryTree(PATH.join(path, child), res))
       .filter((e: any) => !!e);
+
   } else {
     return null; // Or set item.size = 0 for devices, FIFO and sockets ?
   }

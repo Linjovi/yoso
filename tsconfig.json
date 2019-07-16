@@ -10,6 +10,6 @@
     "jsx": "react",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["actions", "bin", "commands", "utils"],
-  "exclude": ["node_modules", "e2e"]
+  "include": ["actions", "bin", "commands", "utils", "component", "ui"],
+  "exclude": ["node_modules", "e2e", "doc"]
 }

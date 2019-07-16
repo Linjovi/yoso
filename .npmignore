@@ -1,8 +1,11 @@
 .idea/
 .gitignore
 
+#doc
+doc/
+
 #test
-test/testDir/
+test/
 
 # source
 **/*.ts

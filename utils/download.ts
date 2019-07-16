@@ -5,9 +5,16 @@ import * as ProgressBar from "progress";
 import * as logSymbols from "log-symbols";
 import chalk from "chalk";
 import ora from "ora";
+import { Options } from "../actions/action.input";
 let spinner: any = null; // loading animate
 let bar: any = null; // loading bar
-
+interface Tree {
+  path: string;
+  mode: string;
+  type: string;
+  sha: string;
+  url: string;
+}
 /**
  * @desc request api get file tree
  * @param {String} username
@@ -21,7 +28,7 @@ export async function requestUrl(
   branch: string,
   download: string,
   filePath: string,
-  options: any
+  options: Options
 ) {
   // request start
   spinner = ora("download start!").start();
@@ -60,10 +67,10 @@ async function handleTree(
   username: string,
   repo: string,
   branch: string,
-  trees: [any],
+  trees: Tree[],
   download: string,
   filePath: string,
-  options: any
+  options: Options
 ) {
   let fileList = trees.filter(item => {
     return item.type === "blob";
@@ -86,12 +93,12 @@ async function handleTree(
         return item.path.split(".")[0] === download;
       });
     }
-    if(filterList.length === 0){
+    if (filterList.length === 0) {
       filterList = fileList.filter(item => {
         return item.path.split("/")[0].includes(download);
       });
     }
-    if(filterList.length === 0){
+    if (filterList.length === 0) {
       filterList = fileList.filter(item => {
         return item.path.split(".")[0].includes(download);
       });
@@ -129,7 +136,7 @@ export async function downloadFile(
   branch: string,
   url: string,
   filePath: string,
-  options: any
+  options: Options
 ) {
   // rename
   const exportUrl = rename(url, filePath);
@@ -153,19 +160,19 @@ export async function downloadFile(
     }
     return res;
   } catch (err) {
-    console.log(err)
+    console.log(err);
     console.log(logSymbols.error, chalk.red(`${url} is error`));
     return;
   }
 }
 
 interface githubTree {
-  path: string,
-  mode: number,
-  type: string,
-  sha: string,
-  size?: number,
-  url: string
+  path: string;
+  mode: number;
+  type: string;
+  sha: string;
+  size?: number;
+  url: string;
 }
 /**
  * @desc request api get git repo contents
@@ -177,7 +184,7 @@ export async function getRepoContent(
   username: string,
   repo: string,
   branch: string
-):Promise<any> {
+): Promise<any> {
   const url = `https://api.github.com/repos/${username}/${repo}/git/trees/${branch}`;
 
   try {

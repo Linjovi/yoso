@@ -7,14 +7,13 @@ import * as fs from "fs";
 import * as path from "path";
 import { readConfig } from "../utils/info";
 
-const filePath = path.dirname(__dirname); //yoso根目录
 const yosoPath = `${process.env.HOME}/.yoso`
 var config = readConfig();
 const fields = [
   {
     name: "username",
     label: "config your github user name",
-    validate: (value: any) => {
+    validate: (value: string) => {
       if (!value) {
         return "Required";
       }
@@ -24,7 +23,7 @@ const fields = [
   {
     name: "repo",
     label: "config your github repo name",
-    validate: (value: any) => {
+    validate: (value: string) => {
       if (!value) {
         return "Required";
       }
@@ -34,7 +33,7 @@ const fields = [
   {
     name: "branch",
     label: "config your github branch name",
-    validate: (value: any) => {
+    validate: (value: string) => {
       if (!value) {
         return "Required";
       }

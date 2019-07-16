@@ -32,8 +32,8 @@ export function mkdirsSync(dirname: string) {
   }
 }
 
-export async function isRewrite(path: string, callback: Function) {
-  if (fs.existsSync(path)) {
+export async function isRewrite(path: string|undefined, callback: Function) {
+  if (path&&fs.existsSync(path)) {
     await inquirer
       .prompt([
         {

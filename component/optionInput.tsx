@@ -2,7 +2,6 @@ import * as React from "react";
 import { AppContext, Box, Text, Color } from "ink";
 import TextInput from "ink-text-input";
 import Table from "ink-table";
-import { callbackify } from "util";
 
 export const OptionInput = (props: any) => {
   const [value, setValue] = React.useState("");

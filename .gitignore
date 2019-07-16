@@ -3,7 +3,7 @@
 node_modules/
 .DS_Store
 .history
-
+doc/
 # output
 lib/**/*.js
 commands/**/*.js

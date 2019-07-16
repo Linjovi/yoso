@@ -2,12 +2,12 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import * as ini from "ini";
-import { yosoConfig } from "../actions/action.input";
+import { yosoConfig, GitInfo } from "../actions/action.input";
 import { mkdirsSync } from "./utils";
 
-const yosoPath = `${process.env.HOME}/.yoso`
+const yosoPath = `${process.env.HOME}/.yoso`;
 
-export function getGitPath(type?: any, options?: any): any {
+export function getGitPath(type?: any, options?: any): string | null {
   if (typeof type !== "string") {
     options = type;
     type = null;
@@ -30,7 +30,7 @@ export function getGitPath(type?: any, options?: any): any {
   return fs.existsSync(configPath) ? configPath : null;
 }
 
-export function getGitInfo() {
+export function getGitInfo(): GitInfo {
   const proPath = getGitPath();
   const globalPath = getGitPath("global");
 
@@ -59,9 +59,9 @@ export function getGitInfo() {
 }
 
 export function readConfig(): yosoConfig {
-  const configPath = path.join(yosoPath,'.yosoconfig');
+  const configPath = path.join(yosoPath, ".yosoconfig");
   if (!fs.existsSync(configPath)) {
-    mkdirsSync(yosoPath)
+    mkdirsSync(yosoPath);
     fs.writeFileSync(
       configPath,
       '{"username":"","repo":"","branch":"master","token":""}'

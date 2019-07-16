@@ -1,4 +1,5 @@
 import { NewCmd } from "../commands";
+import { KV, Options } from "./action.input";
 import { AbstractAction } from "./abstract.action";
 import * as fs from "fs";
 import * as path from "path";
@@ -13,19 +14,20 @@ import {
 import { directoryTree } from "../utils/fileTree";
 import { optionView } from "../ui/optionInput";
 
+interface NewData {
+  model: string;
+  fullPath: string;
+}
+const yosoPath = `${process.env.HOME}/.yoso`;
 
-var filePath = path.dirname(__dirname); //yoso根目录
-var currentPath = process.cwd(); //当前目录
-const yosoPath = `${process.env.HOME}/.yoso`
-
-var data: any;
+var data: NewData;
 
 export class NewAction extends AbstractAction {
   public async handle(inputs: NewCmd) {
     var name = path.basename(inputs.path);
     const gitInfo = getGitInfo();
 
-    var options: { [k: string]: any } = { name ,date:formatDate(new Date()) };
+    var options: Options = { name, date: formatDate(new Date()) };
 
     if (gitInfo.name) {
       options.author = gitInfo.name;
@@ -40,9 +42,9 @@ export class NewAction extends AbstractAction {
     };
 
     if (inputs.options.others) {
-      optionView(options, (list: any) => {
-        list.forEach((element:any) => {
-          options[element.key] = element.value
+      optionView(options, (list: KV[]) => {
+        list.forEach((element: KV) => {
+          options[element.key] = element.value;
         });
         console.log(options);
         newTpl(data, options);
@@ -54,7 +56,7 @@ export class NewAction extends AbstractAction {
   }
 }
 
-function newTpl(data: any, options: any) {
+function newTpl(data: NewData, options: Options) {
   let res = loadLocalTpl(data.model, data.fullPath);
   if (!res) {
     return;
@@ -74,9 +76,8 @@ function newTpl(data: any, options: any) {
 function loadLocalTpl(tplPath: string, toPath: string) {
   let res: any = new Set();
   var Finder = require("fs-finder");
-  let fileExists = Finder.in(path.join(yosoPath, "tpl")).findFiles(
-    tplPath
-  ).length;
+  let fileExists = Finder.in(path.join(yosoPath, "tpl")).findFiles(tplPath)
+    .length;
   let dirExists = fs.existsSync(path.join(yosoPath, "tpl", tplPath));
 
   if (fileExists + dirExists > 1) {
@@ -92,14 +93,12 @@ function loadLocalTpl(tplPath: string, toPath: string) {
       directoryTree(path.join(yosoPath, "tpl", tplPath), res);
     } else {
       //文件
-      var item = Finder.in(path.join(yosoPath, "tpl")).findFiles(
-        tplPath
-      )[0];
+      var item = Finder.in(path.join(yosoPath, "tpl")).findFiles(tplPath)[0];
       var url = path.relative(path.join(yosoPath, "tpl"), item);
       res = [{ url }];
     }
 
-    res.forEach((element: any) => {
+    res.forEach((element: { path: String; url: string }) => {
       element.path = rename(element.url, toPath);
     });
     // console.log(res)

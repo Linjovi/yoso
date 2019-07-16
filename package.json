@@ -13,7 +13,9 @@
     "postpublish": "npm run build:clear",
     "build:clear": "find ./actions ./bin ./commands ./utils ./ui ./component -type f -name '*.d.ts' -delete & find ./actions ./bin ./commands ./utils ./ui ./component -type f -not -name '*.ts*' -delete",
     "commit": "git-cz .",
-    "release": "standard-version"
+    "release": "standard-version",
+    "publish": "git push --follow-tags origin master && npm publish",
+    "doc":"typedoc --out doc"
   },
   "config": {
     "commitizen": {
@@ -67,6 +69,7 @@
     "standard-version": "^6.0.1",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
+    "typedoc": "^0.14.2",
     "typescript": "^3.5.2"
   }
 }

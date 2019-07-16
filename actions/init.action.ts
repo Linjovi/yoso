@@ -1,4 +1,4 @@
-import { NewCmd } from "../commands";
+import { InitCmd } from "../commands";
 import { AbstractAction } from "./abstract.action";
 import * as path from "path";
 import { requestUrl } from "../utils/download";
@@ -6,13 +6,14 @@ import { isRewrite, formatDate } from "../utils/utils";
 import { getGitInfo, readConfig } from "../utils/info";
 import { optionView } from "../ui/optionInput";
 import { initSelector } from "../ui/initSelector";
+import { KV } from "./action.input";
 
 interface initData {
   username: string;
   repo: string;
   branch: string;
-  download: string;
-  path: string;
+  download: string | undefined;
+  path: string | undefined;
 }
 
 interface initUIValue {
@@ -27,7 +28,7 @@ interface initUIValue {
 }
 
 export class InitAction extends AbstractAction {
-  public async handle(inputs: NewCmd) {
+  public async handle(inputs: InitCmd) {
     var config = readConfig();
 
     var data = {
@@ -43,7 +44,6 @@ export class InitAction extends AbstractAction {
       showInitUI(data);
       return;
     }
-
     isRewrite(data.path, () => {
       initTpl(data, inputs.options.others);
     });
@@ -68,7 +68,7 @@ function initTpl(data: initData, others: boolean) {
   if (!data.path && data.download) {
     data.path = path.basename(data.download).split(".")[0];
   }
-  var name = path.basename(data.path);
+  var name = path.basename((data.path as string));
   const gitInfo = getGitInfo();
 
   var options: { [k: string]: any } = { name, date: formatDate(new Date()) };
@@ -81,8 +81,8 @@ function initTpl(data: initData, others: boolean) {
   }
 
   if (others) {
-    optionView(options, (list: any) => {
-      list.forEach((element: any) => {
+    optionView(options, (list: KV[]) => {
+      list.forEach((element: KV) => {
         options[element.key] = element.value;
       });
       console.log(options);
@@ -90,8 +90,8 @@ function initTpl(data: initData, others: boolean) {
         data.username,
         data.repo,
         data.branch,
-        data.download,
-        data.path,
+        (data.download as string),
+        (data.path as string),
         options
       );
     });
@@ -102,8 +102,8 @@ function initTpl(data: initData, others: boolean) {
     data.username,
     data.repo,
     data.branch,
-    data.download,
-    data.path,
+    (data.download as string),
+    (data.path as string),
     options
   );
 }
