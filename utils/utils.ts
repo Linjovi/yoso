@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
-import * as inquirer from "inquirer";
 import * as nunjucks from "nunjucks";
+import { rewriteView } from "../ui/rewrite";
 
 var currentPath = process.cwd(); //当前目录
 
@@ -32,22 +32,9 @@ export function mkdirsSync(dirname: string) {
   }
 }
 
-export async function isRewrite(path: string|undefined, callback: Function) {
-  if (path&&fs.existsSync(path)) {
-    await inquirer
-      .prompt([
-        {
-          type: "confirm",
-          name: "rewrite",
-          message: `The path '${path}' is already exists, do you want to rewrite?`,
-          default: false
-        }
-      ])
-      .then((answers: any) => {
-        if (answers.rewrite) {
-          callback();
-        }
-      });
+export async function isRewrite(path: string | undefined, callback: Function) {
+  if (path && fs.existsSync(path)) {
+    rewriteView(path, callback);
   } else {
     callback();
   }
@@ -68,32 +55,34 @@ export function rename(url: string, filePath: string) {
   return path.join(currentPath, realPath);
 }
 
-export function deleteall(path:string) {
-	var files = [];
-	if(fs.existsSync(path)) {
-		files = fs.readdirSync(path);
-		files.forEach(function(file, index) {
-			var curPath = path + "/" + file;
-			if(fs.statSync(curPath).isDirectory()) { // recurse
-				deleteall(curPath);
-			} else { // delete file
-				fs.unlinkSync(curPath);
-			}
-		});
-		fs.rmdirSync(path);
-	}
-};
+export function deleteall(path: string) {
+  var files = [];
+  if (fs.existsSync(path)) {
+    files = fs.readdirSync(path);
+    files.forEach(function(file, index) {
+      var curPath = path + "/" + file;
+      if (fs.statSync(curPath).isDirectory()) {
+        // recurse
+        deleteall(curPath);
+      } else {
+        // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
+}
 
-export function formatDate(date:Date) {
+export function formatDate(date: Date) {
   var myyear = date.getFullYear();
   var mymonth = date.getMonth() + 1;
   var myweekday = date.getDate();
 
   if (mymonth < 10) {
-      (mymonth as any) = "0" + mymonth;
+    (mymonth as any) = "0" + mymonth;
   }
   if (myweekday < 10) {
-      (myweekday as any) = "0" + myweekday;
+    (myweekday as any) = "0" + myweekday;
   }
-  return (myyear + "-" + mymonth + "-" + myweekday);//想要什么格式都可以随便自己拼
+  return myyear + "-" + mymonth + "-" + myweekday; //想要什么格式都可以随便自己拼
 }
