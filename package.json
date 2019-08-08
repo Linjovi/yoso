@@ -14,7 +14,7 @@
     "build:clear": "find ./actions ./bin ./commands ./utils ./ui ./component -type f -name '*.d.ts' -delete & find ./actions ./bin ./commands ./utils ./ui ./component -type f -not -name '*.ts*' -delete",
     "commit": "git-cz .",
     "release": "standard-version",
-    "publish": "git push --follow-tags origin master && npm publish",
+    "push": "git push --follow-tags origin master && npm publish",
     "doc": "typedoc --out doc"
   },
   "config": {
