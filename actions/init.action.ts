@@ -31,22 +31,32 @@ export class InitAction extends AbstractAction {
   public async handle(inputs: InitCmd) {
     var config = readConfig();
 
-    var data = {
-      username: inputs.options.username || config.username,
-      repo: inputs.options.repo || config.repo,
-      branch: inputs.options.branch || config.branch || "master",
-      download: inputs.tpl,
-      path: inputs.path
-    };
+    if (config.repoSource === 0) {//github
+      let data = {
+        username: inputs.options.username || config.github!.username,
+        repo: inputs.options.repo || config.github!.repo,
+        branch: inputs.options.branch || config.github!.branch || "master",
+        download: inputs.tpl,
+        path: inputs.path
+      };
 
-    //if use init directly
-    if (!data.download) {
-      showInitUI(data);
-      return;
+      //if use init directly
+      if (!data.download) {
+        showInitUI(data);
+        return;
+      }
+      isRewrite(data.path, () => {
+        initTpl(data, inputs.options.others);
+      });
+    }else if(config.repoSource === 1){
+      // let data = {
+      //   address: inputs.options.address || config.gitlab!.address,
+      //   repo: inputs.options.repo || config.gitlab!.repo,
+      //   branch: inputs.options.branch || config.gitlab!.branch || "master",
+      //   download: inputs.tpl,
+      //   path: inputs.path
+      // }
     }
-    isRewrite(data.path, () => {
-      initTpl(data, inputs.options.others);
-    });
   }
 }
 /**

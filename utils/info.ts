@@ -64,7 +64,7 @@ export function readConfig(): yosoConfig {
     mkdirsSync(yosoPath);
     fs.writeFileSync(
       configPath,
-      '{"username":"","repo":"","branch":"master","token":""}'
+      '{"github":{"username":"","repo":"","branch":"master","token":""},"gitlab":{"gitlab":"","repo":"","branch":"master","token":""},"repoSource":0}'
     );
   }
   var config = JSON.parse(fs.readFileSync(configPath).toString());

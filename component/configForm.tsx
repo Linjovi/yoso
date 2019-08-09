@@ -6,10 +6,18 @@ import Error from "./Error";
 import * as fs from "fs";
 import * as path from "path";
 import { readConfig } from "../utils/info";
+import SelectInput from "ink-select-input";
+import { GithubInfo, GitlabInfo } from "../actions/action.input";
 
-const yosoPath = `${process.env.HOME}/.yoso`
+interface FieldConfig {
+  name: string;
+  label: string;
+  validate: any;
+  Input: any;
+}
+const yosoPath = `${process.env.HOME}/.yoso`;
 var config = readConfig();
-const fields = [
+const githubFields = [
   {
     name: "username",
     label: "config your github user name",
@@ -47,18 +55,109 @@ const fields = [
   }
 ];
 
-/// CliForm
+const gitlabField = [
+  {
+    name: "address",
+    label: "config your gitlab address",
+    validate: (value: string) => {
+      if (!value) {
+        return "Required";
+      }
+    },
+    Input: TextInput
+  },
+  {
+    name: "repo",
+    label: "config your gitlab repo id",
+    validate: (value: string) => {
+      if (!value) {
+        return "Required";
+      }
+    },
+    Input: TextInput
+  },
+  {
+    name: "branch",
+    label: "config your gitlab branch name",
+    validate: (value: string) => {
+      if (!value) {
+        return "Required";
+      }
+    },
+    Input: TextInput
+  },
+  {
+    name: "token",
+    label: "config you personal token",
+    validate: (value: string) => {
+      if (!value) {
+        return "Required";
+      }
+    },
+    Input: TextInput
+  }
+];
+
 export function ConfigForm() {
-  const [activeField, setActiveField] = React.useState(0);
-  const [submission, setSubmission] = React.useState(config);
+  const [repoSource, setRepoSource] = React.useState(0);
+  const [step, setStep] = React.useState(0);
   const [finish, setFinish] = React.useState(false);
+
+  const handleSelect = (item: any) => {
+    setRepoSource(item.value);
+    setStep(1);
+  };
+
+  const items = [
+    {
+      label: "github",
+      value: 0
+    },
+    {
+      label: "gitlab",
+      value: 1
+    }
+  ];
+
   return finish ? (
     <AppContext.Consumer>
       {({ exit }) => {
         setTimeout(exit);
+        config.repoSource = repoSource;
+        return <Box />;
+      }}
+    </AppContext.Consumer>
+  ) : step === 0 ? (
+    <SelectInput items={items} onSelect={handleSelect} />
+  ) : (
+    <SettingForm
+      repoSource={repoSource}
+      fields={repoSource === 0 ? githubFields : gitlabField}
+    />
+  );
+}
+/// CliForm
+export function SettingForm(props: any) {
+  const [activeField, setActiveField] = React.useState(0);
+  const [submission, setSubmission] = React.useState(
+    props.repoSource === 0 ? config.github : config.gitlab
+  );
+  const [finish, setFinish] = React.useState(false);
+
+  return finish ? (
+    <AppContext.Consumer>
+      {({ exit }) => {
+        setTimeout(exit);
+        config.repoSource = props.repoSource;
+        switch (props.repoSource) {
+          case 0:
+            config.github = submission as GithubInfo;
+          case 1:
+            config.gitlab = submission as GitlabInfo;
+        }
         fs.writeFileSync(
-          path.join(yosoPath,'.yosoconfig'),
-          JSON.stringify(submission)
+          path.join(yosoPath, ".yosoconfig"),
+          JSON.stringify(config)
         );
         return (
           <Box flexDirection="column" marginTop={1}>
@@ -71,40 +170,45 @@ export function ConfigForm() {
       }}
     </AppContext.Consumer>
   ) : (
-    <Form onSubmit={setSubmission} initialValues={config}>
+    <Form
+      onSubmit={setSubmission}
+      initialValues={props.repoSource == 0 ? config.github : config.gitlab}
+    >
       {({ handleSubmit, validating }) => (
         <Box flexDirection="column">
-          {fields.map(({ name, label, validate, Input }, index) => (
-            <Field name={name} key={name} validate={validate}>
-              {({ input, meta }) => (
-                <Box flexDirection="column">
-                  <Box>
-                    <Text bold={activeField === index}>{label}: </Text>
-                    {activeField === index ? (
-                      <Input
-                        {...input}
-                        onSubmit={() => {
-                          if (meta.valid && !validating) {
-                            setActiveField(value => value + 1); // go to next field
-                            if (activeField === fields.length - 1) {
-                              // last field, so submit
-                              handleSubmit();
-                              setFinish(true);
+          {(props.fields as FieldConfig[]).map(
+            ({ name, label, validate, Input }, index) => (
+              <Field name={name} key={name} validate={validate}>
+                {({ input, meta }) => (
+                  <Box flexDirection="column">
+                    <Box>
+                      <Text bold={activeField === index}>{label}: </Text>
+                      {activeField === index ? (
+                        <Input
+                          {...input}
+                          onSubmit={() => {
+                            if (meta.valid && !validating) {
+                              setActiveField(value => value + 1); // go to next field
+                              if (activeField === props.fields.length - 1) {
+                                // last field, so submit
+                                handleSubmit();
+                                setFinish(true);
+                              }
+                            } else {
+                              input.onBlur(); // mark as touched to show error
                             }
-                          } else {
-                            input.onBlur(); // mark as touched to show error
-                          }
-                        }}
-                      />
-                    ) : (
-                      input.value && <Text>{input.value}</Text>
-                    )}
+                          }}
+                        />
+                      ) : (
+                        input.value && <Text>{input.value}</Text>
+                      )}
+                    </Box>
+                    {meta.error && meta.touched && <Error>{meta.error}</Error>}
                   </Box>
-                  {meta.error && meta.touched && <Error>{meta.error}</Error>}
-                </Box>
-              )}
-            </Field>
-          ))}
+                )}
+              </Field>
+            )
+          )}
         </Box>
       )}
     </Form>

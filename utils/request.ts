@@ -7,26 +7,26 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(
-  (config:any) => {
+  (config: any) => {
     // do something before request is sent
     let yosoConfig = readConfig();
-    if (yosoConfig.token) {
-      config.headers.common["Authorization"] = `Token ${yosoConfig.token}`;
+    if (yosoConfig.repoSource === 0 && yosoConfig.github!.token) {
+      config.headers.common["Authorization"] = `Token ${yosoConfig.github!.token}`;
     }
     return config;
   },
-  (error:any) => {
+  (error: any) => {
     // do something with request error
     return Promise.reject(error);
   }
 );
 
 instance.interceptors.response.use(
-  (response:any) => {
+  (response: any) => {
     return response;
   },
-  (error:any) => {
-    if(!error.response || !error.response.status){
+  (error: any) => {
+    if (!error.response || !error.response.status) {
       console.log(
         chalk.red(`Network Error!`)
       );
