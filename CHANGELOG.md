@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/Linjovi/yoso/compare/v1.1.5...v1.2.0) (2019-08-12)
+
+
+### Features
+
+* add download gitlab util ([0d612dc](https://github.com/Linjovi/yoso/commit/0d612dc))
+* add gitlab support ([e08862b](https://github.com/Linjovi/yoso/commit/e08862b))
+* **init.action.ts:** add gitlab in config ([312437c](https://github.com/Linjovi/yoso/commit/312437c))
+* add rewrite view ([e8b59ed](https://github.com/Linjovi/yoso/commit/e8b59ed))
+
+
+
 ### [1.1.5](https://github.com/Linjovi/yoso/compare/v1.1.4...v1.1.5) (2019-08-06)
 
 
