@@ -45,25 +45,25 @@ instance.interceptors.response.use(
     switch (error.response.status) {
       case 401:
         console.log(
-          chalk.red(`Unauthorized! Update your personal access token!`)
+          chalk.red(`Unauthorized! Update your personal access token!\n\n`)
         );
         break;
       case 403:
         console.log(
           chalk.red(
-            `Forbidden! Create a personal access token on github and config it!`
+            `Forbidden! Create a personal access token on github and config it!\n`
           )
         );
         break;
       case 404:
         console.log(
           chalk.red(
-            `Not found! Check that your username, repo and branch are correct!`
+            `Not found! Check that your username, repo and branch are correct!\n`
           )
         );
         break;
       default:
-        console.log(chalk.red(`network is error!`));
+        console.log(chalk.red(`network is error!\n`));
         break;
     }
     return Promise.reject(error);
