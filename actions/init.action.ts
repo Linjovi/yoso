@@ -2,6 +2,7 @@ import { InitCmd } from "../commands";
 import { AbstractAction } from "./abstract.action";
 import * as path from "path";
 import { requestUrl } from "../utils/download";
+import { downloadTpl } from "../utils/downloadGitlab";
 import { isRewrite, formatDate } from "../utils/utils";
 import { getGitInfo, readConfig } from "../utils/info";
 import { optionView } from "../ui/optionInput";
@@ -14,6 +15,7 @@ interface initData {
   branch: string;
   download: string | undefined;
   path: string | undefined;
+  repoSource: number;
 }
 
 interface initUIValue {
@@ -30,33 +32,42 @@ interface initUIValue {
 export class InitAction extends AbstractAction {
   public async handle(inputs: InitCmd) {
     var config = readConfig();
-
-    if (config.repoSource === 0) {//github
-      let data = {
-        username: inputs.options.username || config.github!.username,
-        repo: inputs.options.repo || config.github!.repo,
-        branch: inputs.options.branch || config.github!.branch || "master",
-        download: inputs.tpl,
-        path: inputs.path
-      };
-
-      //if use init directly
-      if (!data.download) {
-        showInitUI(data);
-        return;
-      }
-      isRewrite(data.path, () => {
-        initTpl(data, inputs.options.others);
-      });
-    }else if(config.repoSource === 1){
-      // let data = {
-      //   address: inputs.options.address || config.gitlab!.address,
-      //   repo: inputs.options.repo || config.gitlab!.repo,
-      //   branch: inputs.options.branch || config.gitlab!.branch || "master",
-      //   download: inputs.tpl,
-      //   path: inputs.path
-      // }
+    // if (config.repoSource === 0) {
+    //github
+    let data = {
+      username:
+        inputs.options.username || config.repoSource === 0
+          ? config.github!.username
+          : config.gitlab!.username,
+      repo:
+        inputs.options.repo || config.repoSource === 0
+          ? config.github!.repo
+          : config.gitlab!.repo,
+      branch:
+        inputs.options.branch || config.repoSource === 0
+          ? config.github!.branch
+          : config.gitlab!.branch || "master",
+      download: inputs.tpl,
+      path: inputs.path,
+      repoSource: config.repoSource
+    };
+    //if use init directly
+    if (!data.download) {
+      showInitUI(data);
+      return;
     }
+    isRewrite(data.path, () => {
+      initTpl(data, inputs.options.others);
+    });
+    // } else if (config.repoSource === 1) {
+    //   // let data = {
+    //   //   address: inputs.options.address || config.gitlab!.address,
+    //   //   repo: inputs.options.repo || config.gitlab!.repo,
+    //   //   branch: inputs.options.branch || config.gitlab!.branch || "master",
+    //   //   download: inputs.tpl,
+    //   //   path: inputs.path
+    //   // }
+    // }
   }
 }
 /**
@@ -78,7 +89,7 @@ function initTpl(data: initData, others: boolean) {
   if (!data.path && data.download) {
     data.path = path.basename(data.download).split(".")[0];
   }
-  var name = path.basename((data.path as string));
+  var name = path.basename(data.path as string);
   const gitInfo = getGitInfo();
 
   var options: { [k: string]: any } = { name, date: formatDate(new Date()) };
@@ -96,24 +107,32 @@ function initTpl(data: initData, others: boolean) {
         options[element.key] = element.value;
       });
       console.log(options);
-      requestUrl(
-        data.username,
-        data.repo,
-        data.branch,
-        (data.download as string),
-        (data.path as string),
-        options
-      );
+      doDownload(data, options);
     });
     return;
   }
 
-  requestUrl(
-    data.username,
-    data.repo,
-    data.branch,
-    (data.download as string),
-    (data.path as string),
-    options
-  );
+  doDownload(data, options);
 }
+
+const doDownload = (data: any, options: any) => {
+  if (data.repoSource === 0) {
+    requestUrl(
+      data.username,
+      data.repo,
+      data.branch,
+      data.download as string,
+      data.path as string,
+      options
+    );
+  } else {
+    downloadTpl(
+      data.username,
+      data.repo,
+      data.branch,
+      data.download,
+      data.path,
+      options
+    );
+  }
+};

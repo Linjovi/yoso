@@ -2,6 +2,7 @@ import * as React from "react";
 import { Box, Color, Text, StdinContext, AppContext } from "ink";
 import TextInput from "ink-text-input";
 import { getRepoContent } from "../utils/download";
+import { getRoot } from "../utils/downloadGitlab";
 
 interface SearchProps {
   stdin: NodeJS.ReadStream;
@@ -9,6 +10,7 @@ interface SearchProps {
   repo: string;
   branch: string;
   getTpl: ((value: string) => void) | undefined;
+  repoSource: number;
 }
 interface RepoItem {
   path: string;
@@ -36,11 +38,10 @@ export const Search = (props: SearchProps) => {
    * Get all repo content lists
    */
   const fetchData = async (): Promise<void> => {
-    const content = await getRepoContent(
-      props.username,
-      props.repo,
-      props.branch
-    );
+    const content =
+      props.repoSource === 0
+        ? await getRepoContent(props.username, props.repo, props.branch)
+        : await getRoot(props.username, props.repo);
     if (content) {
       setAllList(content);
       setList(content);
@@ -161,7 +162,7 @@ export const Search = (props: SearchProps) => {
       <Box flexDirection="row">
         <Box marginRight={3}>
           <Text>
-            Search templates on <Color cyan>Github</Color>:
+            Search templates on <Color cyan>{props.repoSource===0?'Github':'Gitlab'}</Color>:
           </Text>
         </Box>
         <Box>
@@ -224,7 +225,6 @@ export const SearchWithStdin = (props: any) => {
   const [step, setStep] = React.useState(1);
   const [tpl, setTpl] = React.useState("");
   let options: any = {};
-
   function getTpl(value: string): void {
     setStep(step + 1);
     setTpl(value);

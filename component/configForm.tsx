@@ -57,7 +57,7 @@ const githubFields = [
 
 const gitlabField = [
   {
-    name: "address",
+    name: "username",
     label: "config your gitlab address",
     validate: (value: string) => {
       if (!value) {
@@ -143,7 +143,7 @@ export function SettingForm(props: any) {
     props.repoSource === 0 ? config.github : config.gitlab
   );
   const [finish, setFinish] = React.useState(false);
-
+  
   return finish ? (
     <AppContext.Consumer>
       {({ exit }) => {
@@ -152,8 +152,12 @@ export function SettingForm(props: any) {
         switch (props.repoSource) {
           case 0:
             config.github = submission as GithubInfo;
+            break;
           case 1:
             config.gitlab = submission as GitlabInfo;
+            break;
+          default:
+            return;
         }
         fs.writeFileSync(
           path.join(yosoPath, ".yosoconfig"),

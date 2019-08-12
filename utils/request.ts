@@ -10,8 +10,20 @@ instance.interceptors.request.use(
   (config: any) => {
     // do something before request is sent
     let yosoConfig = readConfig();
-    if (yosoConfig.repoSource === 0 && yosoConfig.github!.token) {
-      config.headers.common["Authorization"] = `Token ${yosoConfig.github!.token}`;
+    if (
+      yosoConfig.repoSource === 0 &&
+      yosoConfig.github &&
+      yosoConfig.github!.token
+    ) {
+      config.headers.common["Authorization"] = `Token ${
+        yosoConfig.github!.token
+      }`;
+    } else if (
+      yosoConfig.repoSource === 1 &&
+      yosoConfig.gitlab &&
+      yosoConfig.gitlab!.token
+    ) {
+      config.headers.common["PRIVATE-TOKEN"] = yosoConfig.gitlab!.token;
     }
     return config;
   },
@@ -27,9 +39,7 @@ instance.interceptors.response.use(
   },
   (error: any) => {
     if (!error.response || !error.response.status) {
-      console.log(
-        chalk.red(`Network Error!`)
-      );
+      console.log(chalk.red(`Network Error!`));
       return Promise.reject(error);
     }
     switch (error.response.status) {

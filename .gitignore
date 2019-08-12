@@ -4,6 +4,7 @@ node_modules/
 .DS_Store
 .history
 doc/
+.vscode/
 # output
 lib/**/*.js
 commands/**/*.js

@@ -1,6 +1,7 @@
 .idea/
 .gitignore
 tsconfig.json
+dist/
 
 #doc
 doc/

@@ -12,7 +12,7 @@ export interface GithubInfo{
 }
 
 export interface GitlabInfo{
-  address:string;
+  username:string;
   repo:string;
   branch:string;
   token:string;
