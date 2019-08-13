@@ -25,7 +25,9 @@ vue-ts.vue
 vuex.ts
 ```
 
-To load template files from the github repository, you need to set up the github repository information first. Includes username, repository name, branch name (default master), token (not required, but github limits requests to 60 requests per hour for unauthenticated requests).
+To load template files from the git repository, you need to set up the git repository information first. 
+- Need username, repository name, branch name (default master), token (not required, but github limits requests to 60 requests per hour for unauthenticated requests) for **github**. 
+- Need gitlab address, repo id, branch, token(required) for **gitlab**. If the repo id is not clear, it can be searched by entering the repo name; if there is any repo has the same name, enter name with namespace.
 ```bash
 $ yoso config
 ```

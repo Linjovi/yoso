@@ -13,20 +13,38 @@ interface FileInfo {
   fromPath: string;
   toPath: string;
 }
-export const getRepoId = async (address: string, repoName: string) => {
-  const url = `https://${address}/api/v4/projects`;
+export const getRepoId = async (
+  address: string,
+  repoNameWithNamespace: string,
+  token:string
+) => {
+  const tem = repoNameWithNamespace.split("/");
+  const repoName = tem[tem.length - 1];
+  const namespace = tem.length > 1 ? tem[0] : null;
+
+  const url = `https://${address}/api/v4/projects?search=${repoName}&simple=true&private_token=${token}`;
   const res = await Request({
     url,
     method: "get"
   });
-  let repoList = JSON.parse(res.data);
-  let repo = repoList.find((item: any) => {
-    return item.name === repoName;
-  });
-  if (repo) {
-    return repo.id;
+  let repoList = res.data;
+  if ((repoList.length === 0)) {
+    // console.log(chalk.red(`${repoName} not found!`));
+    return null;
+  } else if (repoList.length === 1) {
+    return repoList[0].id;
+  } else if (repoList.length > 1 && namespace) {
+    let repo = repoList.find((item: any) => {
+      return item.path_with_namespace === repoNameWithNamespace;
+    });
+    if (repo) {
+      return repo.id;
+    } else {
+      // console.log(chalk.red(`${repoNameWithNamespace} not found!`));
+      return null;
+    }
   } else {
-    console.log(chalk.red(`repo ${repoName} not found!`));
+    // console.log(chalk.red(`more than one ${repoName} found!`));
     return null;
   }
 };

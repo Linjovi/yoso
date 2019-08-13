@@ -1,14 +1,17 @@
+import * as fs from "fs";
+import * as path from "path";
 import * as React from "react";
 import { Form, Field } from "react-final-form";
+import SelectInput from "ink-select-input";
 import { AppContext, Box, Color, Text } from "ink";
 import TextInput from "./TextInput";
 import Error from "./Error";
-import * as fs from "fs";
-import * as path from "path";
 import { readConfig } from "../utils/info";
-import SelectInput from "ink-select-input";
+import { getRepoId } from "../utils/downloadGitlab";
 import { GithubInfo, GitlabInfo } from "../actions/action.input";
-
+import { object } from "prop-types";
+let tmpAddress = "";
+let tmpToken = "";
 interface FieldConfig {
   name: string;
   label: string;
@@ -63,32 +66,51 @@ const gitlabField = [
       if (!value) {
         return "Required";
       }
-    },
-    Input: TextInput
-  },
-  {
-    name: "repo",
-    label: "config your gitlab repo id",
-    validate: (value: string) => {
-      if (!value) {
-        return "Required";
-      }
-    },
-    Input: TextInput
-  },
-  {
-    name: "branch",
-    label: "config your gitlab branch name",
-    validate: (value: string) => {
-      if (!value) {
-        return "Required";
-      }
+      tmpAddress = value;
     },
     Input: TextInput
   },
   {
     name: "token",
     label: "config you personal token",
+    validate: (value: string) => {
+      if (!value) {
+        return "Required";
+      }
+      tmpToken = value;
+    },
+    Input: TextInput
+  },
+  {
+    name: "repo",
+    label: "config your repo id, enter name(with namespace)to search",
+    validate: async (value: string) => {
+      if (!value) {
+        return "Required";
+      }
+      var reg = /^[\d]+$/;
+      if (!reg.test(value)) {
+        //search name
+        let id;
+        try {
+          id = await getRepoId(tmpAddress, value ,tmpToken);
+          if (id) {
+            value = `${id}`;
+            return `id is ${id}`;
+          } else {
+            return `can't found`;
+          }
+        } catch (err) {
+          console.log(err);
+          return "err";
+        }
+      }
+    },
+    Input: TextInput
+  },
+  {
+    name: "branch",
+    label: "config your branch name",
     validate: (value: string) => {
       if (!value) {
         return "Required";
@@ -143,7 +165,7 @@ export function SettingForm(props: any) {
     props.repoSource === 0 ? config.github : config.gitlab
   );
   const [finish, setFinish] = React.useState(false);
-  
+
   return finish ? (
     <AppContext.Consumer>
       {({ exit }) => {

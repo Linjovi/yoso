@@ -1,4 +1,4 @@
-## YOSO[![npm](https://img.shields.io/npm/v/yoso.svg?maxAge=2592000)](https://www.npmjs.com/package/yoso)
+c## YOSO[![npm](https://img.shields.io/npm/v/yoso.svg?maxAge=2592000)](https://www.npmjs.com/package/yoso)
 这是一个根据自定义模板自动生成文件的命令行工具。只需要设置一次，就可以重复使用。
 
 ## 安装
@@ -16,13 +16,17 @@ $ npm install -g yoso
 component
 ├── component.html
 ├── component.js
-├── component.scss
+├── component.scssv
 └── ui.js
 vue-ts.vue
 vuex.ts
 ```
 
-如果要从github仓库中加载模板文件，你需要先设置github仓库的信息。包括用户名，仓库名，分支名（默认master），token（非必需，但是github对于未经身份验证的请求，会限制每小时最多60次请求）。
+支持从**gitlab**和**github**仓库中获取模板。如果要从git仓库中加载模板文件，你需要先设置git仓库的信息。
+
+- github仓库需要用户名，仓库名，分支名（默认master），token（非必需，但是github对于未经身份验证的请求，会限制每小时最多60次请求）。 
+
+- gitlab仓库需要gitlab地址，仓库id，分支（默认master），token（必需），其中，如果不清楚仓库id，可以通过直接输入仓库名来搜索获得，如果有重名的仓库，就带上namespace。
 ```bash
 $ yoso config
 ```
