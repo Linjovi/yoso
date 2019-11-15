@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.3](https://github.com/Linjovi/yoso/compare/v1.2.2...v1.2.3) (2019-11-15)
+
+
+### Bug Fixes
+
+* **utils/download.ts:** fix bug when init json ([14c6917](https://github.com/Linjovi/yoso/commit/14c6917)), closes [#12](https://github.com/Linjovi/yoso/issues/12)
+
+
+
 ### [1.2.2](https://github.com/Linjovi/yoso/compare/v1.2.1...v1.2.2) (2019-08-13)
 
 
