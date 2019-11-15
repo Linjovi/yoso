@@ -68,6 +68,5 @@ export function readConfig(): yosoConfig {
     );
   }
   var config = JSON.parse(fs.readFileSync(configPath).toString());
-
   return config;
 }

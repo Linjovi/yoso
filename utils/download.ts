@@ -150,7 +150,11 @@ export async function downloadFile(
       url: `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${url}`,
       method: "get"
     });
-    generateFileFromTpl(res.data, options, exportUrl);
+    let tpl = res.data;
+    if(typeof(tpl)==='object'){
+      tpl = JSON.stringify(tpl);
+    }
+    generateFileFromTpl(tpl, options, exportUrl);
     bar.tick();
     if (bar.complete) {
       console.log(
