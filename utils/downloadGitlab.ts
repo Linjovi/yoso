@@ -49,9 +49,9 @@ export const getRepoId = async (
   }
 };
 
-export const getRoot = async (address: string, repo: string) => {
+export const getRoot = async (address: string, repo: string, branch: string) => {
   try {
-    const url = `https://${address}/api/v4/projects/${repo}/repository/tree`;
+    const url = `https://${address}/api/v4/projects/${repo}/repository/tree?ref=${branch}`;
     const res = await Request({
       url,
       method: "get"

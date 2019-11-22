@@ -41,7 +41,7 @@ export const Search = (props: SearchProps) => {
     const content =
       props.repoSource === 0
         ? await getRepoContent(props.username, props.repo, props.branch)
-        : await getRoot(props.username, props.repo);
+        : await getRoot(props.username, props.repo, props.branch);
     if (content) {
       setAllList(content);
       setList(content);
