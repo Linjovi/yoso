@@ -1,4 +1,5 @@
-c## YOSO[![npm](https://img.shields.io/npm/v/yoso.svg?maxAge=2592000)](https://www.npmjs.com/package/yoso)
+## YOSO[![npm](https://img.shields.io/npm/v/yoso.svg?maxAge=2592000)](https://www.npmjs.com/package/yoso)
+
 这是一个根据自定义模板自动生成文件的命令行工具。只需要设置一次，就可以重复使用。
 
 ## 安装
